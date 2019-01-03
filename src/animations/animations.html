@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My Title</title>
+    <meta name="description" content="Basic HTML5 template">
+    <meta name="author" content="My Name">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="./animations.css">
+</head>
+<body>
+    <div id="nav">
+        <a href="/index.html">Index</a>
+        <a href="/animations/animations.html">Animations</a>
+        <button onclick="animationManager.startAll()">Start All</button>
+        <button onclick="animationManager.stopAll()">Stop All</button>
+
+    </div>
+    <div id="game">
+        <canvas id="velo"></canvas>
+        <canvas id="walk-left" style="position: absolute; top: 200px; left: 300px;"></canvas>
+        <canvas id="attack-left" style="position: absolute; top: 200px; left: 500px;"></canvas>
+    </div>
+
+    <script src="./animations.js"></script>
+    <script src="./animations.test.js"></script>
+</body>
+</html>
