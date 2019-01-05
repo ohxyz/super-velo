@@ -212,7 +212,7 @@ function jump() {
 
 var veloImage = new Image();
 
-veloImage.src = './assets/red-velo-784.png';
+veloImage.src = './assets/walk.png';
 
 veloImage.onload = function() {
 

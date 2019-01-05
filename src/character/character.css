@@ -1,0 +1,10 @@
+#velo {
+
+    background-color: #eeeeee;
+    opacity: 0.5;
+}
+
+body {
+
+    background: repeat url("/assets/background-dev.png");
+}
