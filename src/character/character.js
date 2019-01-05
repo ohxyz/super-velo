@@ -1,12 +1,6 @@
 /**
  * Character
  */
-
-const UP = 0;
-const RIGHT = 1;
-const DOWN = 2;
-const LEFT = 3;
-
 class Character {
 
     constructor( { canvasElement, width, height, x, y, animationManager, facing } ) {
@@ -70,24 +64,24 @@ class Character {
 
     idleLeft( animationId = 'idle-left' ) {
 
-        this.animationManager.startOnlyOne( { id: animationId, onlyOnce: true } );
+        this.animationManager.runOnlyOne( { id: animationId, startOnlyOnce: true } );
     }
 
     idleRight( animationId = 'idle-right' ) {
 
-        this.animationManager.startOnlyOne( { id: animationId, onlyOnce: true } );
+        this.animationManager.runOnlyOne( { id: animationId, startOnlyOnce: true } );
     }
 
     walkLeft( animationId = 'walk-left' ) {
 
-        this.animationManager.startOnlyOne( { id: animationId, onlyOnce: true } );
+        this.animationManager.runOnlyOne( { id: animationId, startOnlyOnce: true } );
         this.move( LEFT, this.stepSize );
         this.facing = LEFT;
     }
 
     walkRight( animationId = 'walk-right' ) {
 
-        this.animationManager.startOnlyOne( { id: animationId, onlyOnce: true } );
+        this.animationManager.runOnlyOne( { id: animationId, startOnlyOnce: true } );
         this.move( RIGHT, this.stepSize );
         this.facing = RIGHT;
     }

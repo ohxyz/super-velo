@@ -24,20 +24,20 @@ class AnimationManager {
 
         if ( this.animations[ id ] === undefined ) {
 
-            throw new Error( `[Velo] Animationnot (ID: ${id}) found.\n` );
+            throw new Error( `[Velo] Animation (ID: ${id}) not found.\n` );
         }
 
         return this.animations[ id ];
     }
 
-    start( { id, onlyOnce } ) {
+    run( { id, startOnlyOnce } ) {
 
         this.currentAnimation = this.get( id );
         this.currentAnimationId = id;        
-        this.currentAnimation.start( onlyOnce );
+        this.currentAnimation.start( startOnlyOnce );
     }
 
-    startOnlyOne( { id, onlyOnce } ) {
+    runOnlyOne( { id, startOnlyOnce } ) {
 
         if ( this.currentAnimationId !== '' 
                 && id !== this.currentAnimationId 
@@ -46,10 +46,10 @@ class AnimationManager {
             this.currentAnimation.stop();
         }
 
-        this.start( { id, onlyOnce } );
+        this.run( { id, startOnlyOnce } );
     }
 
-    startAll() {
+    runAll() {
 
         for ( let id in this.animations ) {
 
@@ -67,12 +67,37 @@ class AnimationManager {
     }
 }
 
+
+class CharacterAnimationManager extends AnimationManager {
+
+    constructor( { canvasElement, width, height, idle, walk, attack, jump } ) {
+
+        super();
+        this.canvasElement = canvasElement;
+        this.width = width;
+        this.height = height;
+        this.idle = idle;
+        this.walk = walk;
+        this.attack = attack;
+        this.jump = jump;
+    }
+
+    idle() {
+
+    }
+
+    walk() {
+
+
+    }
+}
+
 class Animation {
 
     constructor( { canvasElement, 
                    width, 
                    height, 
-                   spriteSource, 
+                   spriteImage, 
                    spriteMatrix,
                    spriteStart,
                    spriteEnd,
@@ -98,8 +123,9 @@ class Animation {
         this.canvasElement.height = this.height;
         this.canvasContext = this.canvasElement.getContext( '2d' );
 
-        this.spriteImage = new Image();
-        this.spriteImage.src = spriteSource;
+        // this.spriteImage = new Image();
+        // this.spriteImage.src = spriteSource;
+        this.spriteImage = spriteImage;
         this.isStarted = false;
     }
 

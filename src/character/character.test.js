@@ -1,12 +1,18 @@
 
 let veloElement = document.getElementById( 'velo' );
 
+let walkImage = new Image();
+walkImage.src = '/assets/walk.png';
+
+let idleImage = new Image();
+idleImage.src = '/assets/idle.png';
+
 let walkLeftAnimation = new Animation( { 
 
     canvasElement: veloElement, 
     width: 196,
     height: 197.5,
-    spriteSource: '/assets/walk.png',
+    spriteImage: walkImage,
     spriteMatrix: [ 4, 4 ],
 } );
 
@@ -15,7 +21,7 @@ let walkRightAnimation = new Animation( {
     canvasElement: veloElement, 
     width: 196,
     height: 197.5,
-    spriteSource: '/assets/walk.png',
+    spriteImage: walkImage,
     spriteMatrix: [ 4, 4 ],
     flip: true
 } );
@@ -25,7 +31,7 @@ let idleLeftAnimation = new Animation( {
     canvasElement: veloElement, 
     width: 196,
     height: 197.5,
-    spriteSource: '/assets/idle.png',
+    spriteImage: idleImage,
     spriteMatrix: [ 4, 5 ],
     speed: 80
 } );
@@ -35,7 +41,7 @@ let idleRightAnimation = new Animation( {
     canvasElement: veloElement, 
     width: 196,
     height: 197.5,
-    spriteSource: '/assets/idle.png',
+    spriteImage: idleImage,
     spriteMatrix: [ 4, 5 ],
     speed: 80,
     flip: true
