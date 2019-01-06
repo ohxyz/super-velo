@@ -7,6 +7,9 @@ walkImage.src = '/assets/walk.png';
 let idleImage = new Image();
 idleImage.src = '/assets/idle.png';
 
+let attackImage = new Image();
+attackImage.src = '/assets/attack.png';
+
 let walkLeftAnimation = new Animation( { 
 
     canvasElement: veloElement, 
@@ -50,20 +53,28 @@ let idleRightAnimation = new Animation( {
 
 let aman = new AnimationManager();
 
-aman.add( 'walk-left', walkLeftAnimation );
-aman.add( 'walk-right', walkRightAnimation );
-aman.add( 'idle-left', idleLeftAnimation );
-aman.add( 'idle-right', idleRightAnimation );
+// aman.add( 'walk-left', walkLeftAnimation );
+// aman.add( 'walk-right', walkRightAnimation );
+// aman.add( 'idle-left', idleLeftAnimation );
+// aman.add( 'idle-right', idleRightAnimation );
+
+let sprites = {
+
+    walk: { image: walkImage, matrix: [ 4, 4 ] },
+    idle: { image: idleImage, matrix: [ 4, 5 ] },
+    attack: { image: attackImage, matrix: [ 4, 2] }
+}
 
 
 let velo = new Character( { 
 
-	canvasElement: veloElement,
-	width: 196,
-	height: 197.5,
-	x: 100,
-	y: 200,
-	animationManager: aman,
+    canvasElement: veloElement,
+    width: 196,
+    height: 197.5,
+    x: 100,
+    y: 200,
+    animationManager: aman,
+    sprites: sprites,
 
 } );
 

@@ -3,12 +3,13 @@
  */
 class Character {
 
-    constructor( { canvasElement, width, height, x, y, animationManager, facing } ) {
+    constructor( { canvasElement, width, height, x, y, animationManager, facing, sprites } ) {
 
         this.canvasElement = canvasElement;
         this.width = width;
         this.height = height;
         this.animationManager = animationManager;
+        this.sprites = sprites;
         this.facing = typeof facing !== 'number' ? RIGHT : facing
 
         this.canvasElement.width = this.width;
@@ -19,6 +20,15 @@ class Character {
 
         this.canvasContext = this.canvasElement.getContext( '2d' );
         this.stepSize = 5;
+
+        this.characterAnimationManager = new CharacterAnimationManager( {
+
+            canvasElement: this.canvasElement,
+            width: this.width,
+            height: this.height,
+            sprites: this.sprites
+            
+        } );
 
         this.idle();
     }
@@ -52,36 +62,25 @@ class Character {
 
     idle() {
 
-        if ( this.facing === LEFT ) {
-
-            this.idleLeft();
-        }
-        else if ( this.facing === RIGHT ) {
-
-            this.idleRight();
-        }
+        this.characterAnimationManager.idle( this.facing );
     }
 
-    idleLeft( animationId = 'idle-left' ) {
+    attack() {
 
-        this.animationManager.runOnlyOne( { id: animationId, startOnlyOnce: true } );
+        this.characterAnimationManager.attack( this.facing );
     }
 
-    idleRight( animationId = 'idle-right' ) {
 
-        this.animationManager.runOnlyOne( { id: animationId, startOnlyOnce: true } );
-    }
+    walkLeft() {
 
-    walkLeft( animationId = 'walk-left' ) {
-
-        this.animationManager.runOnlyOne( { id: animationId, startOnlyOnce: true } );
+        this.characterAnimationManager.walk( LEFT );
         this.move( LEFT, this.stepSize );
         this.facing = LEFT;
     }
 
-    walkRight( animationId = 'walk-right' ) {
+    walkRight() {
 
-        this.animationManager.runOnlyOne( { id: animationId, startOnlyOnce: true } );
+        this.characterAnimationManager.walk( RIGHT );
         this.move( RIGHT, this.stepSize );
         this.facing = RIGHT;
     }
