@@ -37,7 +37,7 @@ class AnimationManager {
         this.currentAnimation.start( startOnlyOnce );
     }
 
-    runOnlyOne( { id, startOnlyOnce } ) {
+    runOne( { id, startOnlyOnce } ) {
 
         if ( this.currentAnimationId !== '' 
                 && id !== this.currentAnimationId 
@@ -75,7 +75,6 @@ class AnimationManager {
 
             this.animations[ id ].start();
         }
-
     }
 
     stopAll() {
@@ -87,10 +86,7 @@ class AnimationManager {
     }
 }
 
-/**
- *
- * 
- */
+
 class CharacterAnimationManager extends AnimationManager {
 
     constructor( { canvasElement, width, height, sprites } ) {
@@ -102,23 +98,24 @@ class CharacterAnimationManager extends AnimationManager {
         this.spritesMeta = sprites;
 
         this.addAnimations();
-
     }
 
-    addAnimationsByAction( actionName, shouldRepeat = true ) {
+    addAnimationsByAction( actionName, shouldRepeat = true, speed = 50, range ) {
 
         let defaultAnimationSettings = {
 
             canvasElement: this.canvasElement,
             width: this.width,
             height: this.height,
-            repeat: shouldRepeat
+            repeat: shouldRepeat,
+            speed: speed
         };
 
         let leftSettings = Object.assign( { 
             
             spriteImage: this.spritesMeta[ actionName ].image,
-            spriteMatrix: this.spritesMeta[ actionName ].matrix
+            spriteMatrix: this.spritesMeta[ actionName ].matrix,
+            spriteRange: this.spritesMeta[ actionName ].range
 
         }, defaultAnimationSettings );
 
@@ -128,8 +125,8 @@ class CharacterAnimationManager extends AnimationManager {
             
             spriteImage: this.spritesMeta[ actionName ].image,
             spriteMatrix: this.spritesMeta[ actionName ].matrix,
+            spriteRange: this.spritesMeta[ actionName ].range,
             flip: true,
-            repeat: shouldRepeat
 
         }, defaultAnimationSettings );
 
@@ -138,9 +135,11 @@ class CharacterAnimationManager extends AnimationManager {
 
     addAnimations() {
 
-        this.addAnimationsByAction( 'walk' );
-        this.addAnimationsByAction( 'idle' );
-        this.addAnimationsByAction( 'attack', false );
+        this.addAnimationsByAction( 'walk', true );
+        this.addAnimationsByAction( 'idle', true, 70 );
+        this.addAnimationsByAction( 'attack', false, 40 );
+        this.addAnimationsByAction( 'jump-start', false, 50, [ 0, 7 ] );
+        this.addAnimationsByAction( 'jump-end', false, 50, [ 0, 7 ] );
 
     }
 
@@ -154,32 +153,41 @@ class CharacterAnimationManager extends AnimationManager {
 
             this.runOnlyFinish( 'attack-right' );
         }
+
+    }
+
+    act( name, direction ) {
+
+        if ( direction === LEFT ) {
+
+            this.runOne( { id: name + '-left', startOnlyOnce: true } );
+        }
+        else if ( direction === RIGHT ) {
+
+            this.runOne( { id: name + '-right', startOnlyOnce: true } );
+        }
+
     }
 
     walk( direction ) {
 
-        if ( direction === LEFT ) {
-
-            this.runOnlyOne( { id: 'walk-left', startOnlyOnce: true } );
-        }
-        else if ( direction === RIGHT ) {
-
-            this.runOnlyOne( { id: 'walk-right', startOnlyOnce: true } );
-        }
+        return this.act( 'walk', direction );
     }
 
     idle( direction ) {
 
-        if ( direction === LEFT ) {
-
-            this.runOnlyOne( { id: 'idle-left', startOnlyOnce: true } );
-        }
-        else if ( direction === RIGHT ) {
-
-            this.runOnlyOne( { id: 'idle-right', startOnlyOnce: true } );
-        }
+        return this.act( 'idle', direction );
     }
 
+    jumpStart( direction ) {
+
+        return this.act( 'jump-start', direction );
+    }
+
+    jumpEnd( direction ) {
+
+        return this.act( 'jump-end', direction );
+    }
 }
 
 class Animation {
@@ -189,8 +197,7 @@ class Animation {
                    height, 
                    spriteImage, 
                    spriteMatrix,
-                   spriteStart,
-                   spriteEnd,
+                   spriteRange,
                    speed,
                    repeat,
                    flip } ) {
@@ -203,12 +210,21 @@ class Animation {
         this.animationSpeed = typeof speed !== 'number' ? 50 : speed;
         this.shouldFlipSprite = flip === undefined ? false : flip;
         this.shouldRepeat = repeat === undefined ? true : repeat;
-        this.startIndexOfSpriteItem = typeof spriteStart !== 'number' ? 0 : spriteStart;
-        this.endIndexOfSpriteItem = typeof spriteStart !== 'number' 
-                                  ? this.countOfSpriteItemsX * this.countOfSpriteItemsY - 1
-                                  : spriteEnd;
 
-        this.animationTimer = -1;
+        if ( spriteRange === undefined ) {
+
+            this.startIndexOfSpriteItem = 0;
+            this.endIndexOfSpriteItem = this.countOfSpriteItemsX * this.countOfSpriteItemsY - 1;
+        }
+        else {
+
+            this.startIndexOfSpriteItem = spriteRange[ 0 ];
+            this.endIndexOfSpriteItem = spriteRange[ 1 ];
+        }
+
+        this.countOfFrames = ( this.endIndexOfSpriteItem - this.startIndexOfSpriteItem ) + 1;
+        this.duration = this.countOfFrames * this.animationSpeed;
+        this.animationTimer = 0;
         this.canvasElement.width = this.width;
         this.canvasElement.height = this.height;
         this.canvasContext = this.canvasElement.getContext( '2d' );

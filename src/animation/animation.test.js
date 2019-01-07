@@ -1,4 +1,4 @@
-/**
+ /**
  * Super Velociraptor
  *
  *
@@ -11,99 +11,6 @@
 
 
 /* Velo *******************************************************************************************/
-
-var velo = document.getElementById( 'velo' );
-var veloContext = velo.getContext( '2d' );
-
-velo.width = 196;
-velo.height = 197;
-
-let shouldEnableJump = true;
-let faceDirection = 0;
-
-var veloImage = new Image();
-
-veloImage.src = '/assets/walk.png';
-
-veloImage.onload = function() {
-
-    // veloContext.drawImage( veloImage, 0, 0, 245, 247, 0, 0, 245, 247 );
-    // renderWalkAnimation( LEFT );
-
-    // veloContext.translate( 245, 0 );
-    // veloContext.scale( -1, 1 );
-    // draw();
-};
-
-let walkAnimationTimer = 0;
-let isWalkAnimationStarted = false;
-
-function startWalkAnimation( direction ) {
-
-    if ( isWalkAnimationStarted === true ) {
-
-        return;
-    }
-
-    renderWalkAnimation( direction );
-    isWalkAnimationStarted = true;
-}
-
-function stopWalkAnimation() {
-
-    clearInterval( walkAnimationTimer );
-    isWalkAnimationStarted = false;
-}
-
-function draw( xSeq = 0, ySeq = 0 ) {
-
-    veloContext.drawImage( veloImage, 196 * xSeq, 197 * ySeq , 196 , 197, 0, 0, 196, 197 );
-}
-
-
-function jump() {
-
-    shouldEnableJump = false;
-
-    let count = 1;
-
-    let jumpTimer = setInterval( () => { 
-
-        if ( count < 20 ) {
-
-            let top = parseInt( velo.style.top );
-            let jumpHeight = parseInt( 50 / count );
-            velo.style.top = top - jumpHeight + 'px';
-
-            count ++;
-        }
-        else {
-
-            clearInterval( jumpTimer );
-
-            let landTimer = setInterval( () => {
-
-                count --;
-
-                if ( count > 0 ) {
-
-                    let top = parseInt( velo.style.top );
-
-                    let jumpHeight = parseInt( 50 / count );
-
-                    velo.style.top = top + jumpHeight + 'px';
-                }
-                else {
-
-                    clearInterval( landTimer );
-                    shouldEnableJump = true;
-                } 
-
-            }, 10 );
-        }
-
-    }, 10 );
-}
 
 let idleImage = new Image();
 idleImage.src = '/assets/idle.png';
@@ -196,8 +103,7 @@ let jumpLeftUpAnimation = new Animation( {
     height: 197.5,
     spriteImage: jumpImage,
     spriteMatrix: [ 4, 3 ],
-    spriteStart: 0,
-    spriteEnd: 7,
+    spriteRange: [ 0, 7 ],
 
     repeat: false,
     // speed: 500,
@@ -211,9 +117,7 @@ let jumpLeftDownAnimation = new Animation( {
     height: 197.5,
     spriteImage: jumpImage,
     spriteMatrix: [ 4, 3 ],
-    spriteStart: 7,
-    spriteEnd: 11,
-
+    spriteRange: [ 7, 11 ],
     repeat: false,
     // speed: 500,
 } );
@@ -225,8 +129,7 @@ let jumpRightAnimation = new Animation( {
     height: 197,
     spriteImage: jumpImage,
     spriteMatrix: [ 4, 3 ],
-    spriteStart: 7,
-    spriteEnd: 11,
+    spriteRange: [ 7, 11 ],
     flip: true,
     repeat: false,
 } );
