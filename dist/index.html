@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>A HTML 5 Canvas Character</title>
+    <meta name="description" content="A HTML 5 Canvas Character - Super Velo">
+    <meta name="author" content="Ohxyz">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="instruction"></div>
+        <span>[A] [W] [D] [S] - Walk</span>
+        &nbsp;&nbsp;
+        <span>[Space] - Jump</span>
+        &nbsp;&nbsp;
+    <div class="buttons">
+        <button onclick="velo.move( UP, 5 )">Move Up</button>
+        <button onclick="velo.move( DOWN, 5 )">Move Down</button>
+        <button onclick="velo.move( LEFT, 5 )">Move Left</button>
+        <button onclick="velo.move( RIGHT, 5 )">Move Right</button>
+        <button onclick="velo.jump()">Jump</button>
+        <button onclick="velo.jumpLeft()">Jump Left</button>
+        <button onclick="velo.jumpRight()">Jump Right</button>
+        <button onclick="velo.jumpUp()">Jump Up</button>
+        <button onclick="velo.jumpDown()">Jump Down</button>
+        <button onclick="velo.walkLeft()">Walk Left</button>
+        <button onclick="velo.walkRight()">Walk Right</button>
+        <button onclick="velo.idle()">Idle</button>
+        <button onclick="velo.attack()">Attack</button>
+    </div>
+    <div id="game">
+        <canvas id="velo"></canvas>       
+    </div>
+    <script src="./global.js"></script>
+    <script src="./animation/animation.js"></script>
+    <script src="./character/character.js"></script>
+    <script src="./character/character.test.js"></script>
+</body>
+</html>

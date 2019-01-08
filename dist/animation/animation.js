@@ -137,7 +137,7 @@ class Animation {
             
             xSeq = frameCount % this.countOfSpriteItemsX;
             ySeq = Math.floor( frameCount / this.countOfSpriteItemsX );
-
+            
             if ( frameCount < endOfFrames ) {
 
                 frameCount ++;
@@ -236,16 +236,9 @@ class AnimationManager {
         if ( this.currentAnimationContainer !== null 
                 && this.currentAnimationContainer.id !== id 
                 && this.currentAnimationContainer.animation.isStarted ) {
-    
-            console.log(
-                'new',
-                newAnimationContainer.id, 
-                newAnimationContainer.priority,
-                'current', 
-                this.currentAnimationContainer.id,
-                this.currentAnimationContainer.priority 
-            )
 
+            
+            // console.log( newAnimationContainer.priority, this.currentAnimationContainer.priority )
             // When new animation container's priority is lower(>) than the current one.
             if ( newAnimationContainer.priority > this.currentAnimationContainer.priority ) {
 

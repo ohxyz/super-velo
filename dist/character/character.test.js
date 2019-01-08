@@ -1,17 +1,16 @@
-
 let veloElement = document.getElementById( 'velo' );
 
 let walkImage = new Image();
-walkImage.src = '/assets/walk.png';
+walkImage.src = './assets/walk.png';
 
 let idleImage = new Image();
-idleImage.src = '/assets/idle.png';
+idleImage.src = './assets/idle.png';
 
 let attackImage = new Image();
-attackImage.src = '/assets/attack.png';
+attackImage.src = './assets/attack.png';
 
 let jumpImage = new Image();
-jumpImage.src = '/assets/jump.png';
+jumpImage.src = './assets/jump.png';
 
 let sprites = {
 

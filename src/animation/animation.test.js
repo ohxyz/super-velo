@@ -134,6 +134,21 @@ let jumpRightAnimation = new Animation( {
     repeat: false,
 } );
 
+let jumpStayLeftAnimation = new Animation( {
+
+    canvasElement: document.getElementById( 'jump-stay-left' ), 
+    width: 196,
+    height: 197,
+    spriteImage: jumpImage,
+    spriteMatrix: [ 4, 3 ],
+    spriteRange: [ 7, 7 ],
+    repeat: false,
+} );
+
+jumpImage.onload = () => {
+
+    jumpStayLeftAnimation.animate();
+}
 
 let animationManager = new AnimationManager();
 
@@ -147,5 +162,8 @@ animationManager.add( 'jump-left', jumpLeftAnimation );
 animationManager.add( 'jump-right', jumpRightAnimation );
 animationManager.add( 'jump-left-up', jumpLeftUpAnimation );
 animationManager.add( 'jump-left-down', jumpLeftDownAnimation );
+
+// animationManager.add( 'jump-stay-left', jumpStayLeftAnimation );
+// animationManager.add( 'jump-stay-right', jumpStayRightAnimation );
 
 animationManager.runAll();
