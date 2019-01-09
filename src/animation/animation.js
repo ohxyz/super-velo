@@ -235,20 +235,6 @@ class AnimationManager {
         return null;
     }
 
-    run( id, onFinish ) {
-
-        this.currentAnimationContainer = this.get( id );
-
-        if ( this.currentAnimationContainer === null ) {
-
-            throw new Error( `[Velo] Animation (ID: ${id}) not found.\n` );
-        }
-
-        this.currentAnimationContainer.animation.start( onFinish );
-
-        return this.currentAnimationContainer;
-    }
-
     /**
      * Run only one animation in the animations array. When the method is called, the current 
      * running animation must be stopped, unless it has a higher priority.
@@ -291,10 +277,18 @@ class AnimationManager {
      */
     runOnlyFinish( id, onFinish ) {
 
+        let newAnimationContainer = this.get( id );
+
+        if ( newAnimationContainer === null ) {
+
+            throw new Error( `[Velo] Animation (ID: ${id}) not found.\n` );
+        }
+
         if ( this.currentAnimationContainer !== null 
                 && this.currentAnimationContainer.id !== id ) {
 
-            if ( this.currentAnimationContainer.animation.isStarted ) {
+            if ( this.currentAnimationContainer.animation.isStarted
+                    && newAnimationContainer.priority < this.currentAnimationContainer.priority ) {
 
                 this.currentAnimationContainer.animation.stop();
             }
@@ -306,7 +300,10 @@ class AnimationManager {
         }
         else {
 
-            return this.run( id, onFinish );
+            newAnimationContainer.animation.start( onFinish );
+            this.currentAnimationContainer = newAnimationContainer;
+
+            return this.currentAnimationContainer;
         }
     }
 

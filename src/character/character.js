@@ -49,7 +49,7 @@ class CharacterAnimationManager extends AnimationManager {
 
         this.addAnimationsByAction( 'walk', true );
         this.addAnimationsByAction( 'idle', true, 70 );
-        this.addAnimationsByAction( 'attack', false, 40 );
+        this.addAnimationsByAction( 'attack', false, 40, 0 );
         this.addAnimationsByAction( 'jump-start', false, 50, 0, true );
         this.addAnimationsByAction( 'jump-end', false, 50, 0 );
         this.addAnimationsByAction( 'jump-prepare', false, 50, 0 );
