@@ -9,7 +9,8 @@ class Animation {
                    speed,
                    repeat,
                    flip,
-                   multiple } ) {
+                   multiple,
+                   keepAlive } ) {
 
         this.canvasElement = canvasElement;
         this.width = width;
@@ -20,6 +21,7 @@ class Animation {
         this.shouldFlipSprite = flip === undefined ? false : flip;
         this.shouldRepeat = repeat === undefined ? true : repeat;
         this.shouldAllowMultiple = multiple === undefined ? false: multiple;
+        this.shouldKeepAlive = keepAlive === undefined ? false : keepAlive;
 
         if ( spriteRange === undefined ) {
 
@@ -131,13 +133,13 @@ class Animation {
         let frameCount = this.startIndexOfSpriteItem;
         let endOfFrames = this.endIndexOfSpriteItem;
 
-        this.animationTimer = setInterval( () => {
+        const drawFrame = () => {
 
             this.canvasContext.clearRect( 0, 0, this.width, this.height );
             
             xSeq = frameCount % this.countOfSpriteItemsX;
             ySeq = Math.floor( frameCount / this.countOfSpriteItemsX );
-            
+
             if ( frameCount < endOfFrames ) {
 
                 frameCount ++;
@@ -145,7 +147,9 @@ class Animation {
             else if ( this.shouldRepeat === false ) {
 
                 clearInterval( this.animationTimer );
-                this.isStarted = false;
+
+                this.isStarted = this.shouldKeepAlive;
+
                 onFinish();
             }
             else {
@@ -155,8 +159,25 @@ class Animation {
             }
 
             this.draw( xSeq, ySeq );
+        }
 
-        }, this.animationSpeed );
+        this.animationTimer = setInterval( drawFrame, this.animationSpeed );
+    }
+}
+
+
+class AnimationContainer {
+
+    constructor( { id, priority, animation } ) {
+
+        this.id = id;
+        this.priority = priority;
+        this.animation = animation;
+    }
+
+    stopAnimation() {
+
+        this.animation.stop();
     }
 }
 
@@ -191,7 +212,14 @@ class AnimationManager {
             }
         }
 
-        this.animationContainers.push( { id: id, animation: animation, priority: priority } );
+        let container = new AnimationContainer( {
+
+            id: id, 
+            animation: animation, 
+            priority: priority 
+        } );
+
+        this.animationContainers.push( container );
     }
 
     get( id ) {
@@ -217,6 +245,8 @@ class AnimationManager {
         }
 
         this.currentAnimationContainer.animation.start( onFinish );
+
+        return this.currentAnimationContainer;
     }
 
     /**
@@ -236,9 +266,7 @@ class AnimationManager {
         if ( this.currentAnimationContainer !== null 
                 && this.currentAnimationContainer.id !== id 
                 && this.currentAnimationContainer.animation.isStarted ) {
-
-            
-            // console.log( newAnimationContainer.priority, this.currentAnimationContainer.priority )
+    
             // When new animation container's priority is lower(>) than the current one.
             if ( newAnimationContainer.priority > this.currentAnimationContainer.priority ) {
 
@@ -252,6 +280,8 @@ class AnimationManager {
 
         newAnimationContainer.animation.start( onFinish );
         this.currentAnimationContainer = newAnimationContainer;
+
+        return newAnimationContainer;
     }
 
     /**
@@ -272,11 +302,11 @@ class AnimationManager {
 
         if ( this.currentAnimationContainer.animation.isStarted ) {
 
-            return;
+            return this.currentAnimationContainer;
         }
         else {
 
-            this.run( id, onFinish );
+            return this.run( id, onFinish );
         }
     }
 

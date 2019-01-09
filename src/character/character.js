@@ -1,3 +1,110 @@
+class CharacterAnimationManager extends AnimationManager {
+
+    constructor( { canvasElement, width, height, sprites } ) {
+
+        super();
+        this.canvasElement = canvasElement;
+        this.width = width;
+        this.height = height;
+        this.spritesMeta = sprites;
+
+        this.addAnimations();
+    }
+
+    addAnimationsByAction( actionName, shouldRepeat, speed, priority, keepAlive ) {
+
+        let defaultAnimationSettings = {
+
+            canvasElement: this.canvasElement,
+            width: this.width,
+            height: this.height,
+            repeat: shouldRepeat,
+            speed: speed,
+            keepAlive: keepAlive
+        };
+
+        let leftSettings = Object.assign( { 
+            
+            spriteImage: this.spritesMeta[ actionName ].image,
+            spriteMatrix: this.spritesMeta[ actionName ].matrix,
+            spriteRange: this.spritesMeta[ actionName ].range
+
+        }, defaultAnimationSettings );
+
+        this.add( actionName + '-left', new Animation( leftSettings ), priority );
+
+        let rightSettings = Object.assign( { 
+            
+            spriteImage: this.spritesMeta[ actionName ].image,
+            spriteMatrix: this.spritesMeta[ actionName ].matrix,
+            spriteRange: this.spritesMeta[ actionName ].range,
+            flip: true,
+
+        }, defaultAnimationSettings );
+
+        this.add( actionName + '-right', new Animation( rightSettings ), priority );
+    }
+
+    addAnimations() {
+
+        this.addAnimationsByAction( 'walk', true );
+        this.addAnimationsByAction( 'idle', true, 70 );
+        this.addAnimationsByAction( 'attack', false, 40 );
+        this.addAnimationsByAction( 'jump-start', false, 50, 0, true );
+        this.addAnimationsByAction( 'jump-end', false, 50, 0 );
+        this.addAnimationsByAction( 'jump-prepare', false, 50, 0 );
+    }
+
+    act( name, direction, onFinish ) {
+
+        if ( direction === LEFT ) {
+
+            return this.runOne( name + '-left', onFinish );
+        }
+        else if ( direction === RIGHT ) {
+
+            return this.runOne( name + '-right', onFinish );
+        }
+    }
+
+    attack( direction ) {
+
+        if ( direction === LEFT ) {
+
+            this.runOnlyFinish( 'attack-left', () => this.idle( direction ) );
+        }
+        else if ( direction === RIGHT ) {
+
+            this.runOnlyFinish( 'attack-right', () => this.idle( direction ) );
+        }
+    }
+
+    walk( direction ) {
+
+        return this.act( 'walk', direction );
+    }
+
+    idle( direction ) {
+
+        return this.act( 'idle', direction );
+    }
+
+    jumpPrepare( direction, onFinish ) {
+
+        return this.act( 'jump-prepare', direction, onFinish );
+    }
+
+    jumpStart( direction, onFinish ) {
+
+        return this.act( 'jump-start', direction, onFinish );
+    }
+
+    jumpEnd( direction, onFinish ) {
+
+        return this.act( 'jump-end', direction, onFinish );
+    }
+}
+
 /**
  * Character
  */
@@ -18,7 +125,7 @@ class Character {
         this.canvasElement.style.top = y + 'px';
 
         this.canvasContext = this.canvasElement.getContext( '2d' );
-        this.stepSize = 5;
+        this.stepSize = 6;
 
         this.characterAnimationManager = new CharacterAnimationManager( {
 
@@ -110,205 +217,124 @@ class Character {
     jumpRight() {
 
         this.facing = RIGHT;
-        return this.jump( 3, 0 );
+        return this.jump( 5, 0 );
     }
 
     jumpLeft() {
 
         this.facing = LEFT;
-        return this.jump( -3, 0 );
+        return this.jump( -5, 0 );
     }
 
     jump( stepX = 0, stepY = 0 ) {
+
+        this.jumpPrepare( () => this.jumpStart( stepX, stepY ) )
+    }
+
+    jumpAfterPrepare( direction ) {
+
+        if ( direction === LEFT ) {
+
+            this.jumpStart( -5, 0 );
+        }
+        else if ( direction === RIGHT ) {
+
+            this.jumpStart( 5, 0 );
+        }
+        else if ( direction === UP ) {
+
+            this.jumpStart( 0, 2 );
+        }
+        else if ( direction === DOWN ) {
+
+            this.jumpStart( 0, -2 );
+        }
+    }
+
+    jumpPrepare( onFinish = () => {} ) {
 
         if ( this.shouldEnableJump === false ) {
 
             return;
         }
 
-        let realJumpIndex = 6; /* Refer to sprite image */
+        this.shouldEnableJump = false;
+        this.characterAnimationManager.jumpPrepare( this.facing, onFinish )
+    }
+
+    jumpStart( stepX = 0, stepY = 0 ) {
+
+        let jumpStartAnimationConatiner = this.characterAnimationManager.jumpStart( this.facing )
 
         let count = 1;
-        let maxCount = 22;
+        let maxCount = 20;
         let speed = 13;
         let startHeight = 50;
         let timePassed = 0;
 
-        let jumpStartAnimation = this.characterAnimationManager.get( 'jump-start-left' ).animation;
-        let delayBeforeJumpStart = jumpStartAnimation.animationSpeed * realJumpIndex;
-
         let jumpEndAnimation = this.characterAnimationManager.get( 'jump-end-left' ).animation;
         let durationOfJumpEnd = jumpEndAnimation.duration;
-        let totalTimeOfJump = speed * maxCount * 2 - 15;
+        let totalTimeOfJump = speed * maxCount * 2 - speed;
         let delayBeforeJumpEnd = totalTimeOfJump - durationOfJumpEnd;
 
-        this.shouldEnableJump = false;
-        this.characterAnimationManager.jumpStart( this.facing, () => {
+        let jumpTimer = setInterval( () => {
 
-            this.characterAnimationManager.jumpStay( this.facing ) 
-        } );
+            if ( count < maxCount ) {
 
-        setTimeout( () => {
+                let top = parseInt( this.canvasElement.style.top, 10 );
+                let left = parseInt( this.canvasElement.style.left, 10 );
+                let distance = parseInt( startHeight / count, 10 );
 
-            let jumpTimer = setInterval( () => {
+                this.canvasElement.style.top = top - distance - stepY + 'px';
+                this.canvasElement.style.left = left + stepX + 'px';
 
-                if ( count < maxCount ) {
+                count ++;
+                timePassed += speed;
 
-                    let top = parseInt( this.canvasElement.style.top, 10 );
-                    let left = parseInt( this.canvasElement.style.left, 10 );
-                    let distance = parseInt( startHeight / count, 10 );
+            }
+            else {
 
-                    this.canvasElement.style.top = top - distance - stepY + 'px';
-                    this.canvasElement.style.left = left + stepX + 'px';
+                clearInterval( jumpTimer );
 
-                    count ++;
+                jumpTimer = setInterval( () => {
+
+                    count --;
                     timePassed += speed;
-                }
-                else {
 
-                    clearInterval( jumpTimer );
+                    /* Based on observation of combination of jump and animation */
+                    if ( timePassed >= delayBeforeJumpEnd ) {
 
-                    jumpTimer = setInterval( () => {
+                        if ( jumpStartAnimationConatiner.animation.isStarted ) {
 
-                        count --;
-                        timePassed += speed;
-
-                        /* Based on observation of combination of jump and animation */
-                        if ( timePassed >= delayBeforeJumpEnd ) {
-
-                            this.characterAnimationManager.jumpEnd( this.facing, () => {
-                                
-                                this.idle();
-                            } )
+                            jumpStartAnimationConatiner.animation.stop();
                         }
 
-                        if ( count > 0 ) {
+                        this.characterAnimationManager.jumpEnd( this.facing, () => {
+                            
+                            this.idle();
+                        } )
+                    }
 
-                            let top = parseInt( this.canvasElement.style.top );
-                            let left = parseInt( this.canvasElement.style.left, 10 );
-                            let distance = parseInt( startHeight / count );
+                    if ( count > 0 ) {
 
-                            this.canvasElement.style.top = top + distance - stepY + 'px';
-                            this.canvasElement.style.left = left + stepX + 'px';
-                        }
-                        else {
+                        let top = parseInt( this.canvasElement.style.top );
+                        let left = parseInt( this.canvasElement.style.left, 10 );
+                        let distance = parseInt( startHeight / count );
 
-                            clearInterval( jumpTimer );
-                            this.shouldEnableJump = true;
-                        } 
+                        this.canvasElement.style.top = top + distance - stepY + 'px';
+                        this.canvasElement.style.left = left + stepX + 'px';
+                    }
+                    else {
 
-                    }, speed );
-                }
+                        clearInterval( jumpTimer );
+                        this.shouldEnableJump = true;
+                    } 
 
-            }, speed );
+                }, speed );
+            }
 
-        }, delayBeforeJumpStart );
-    }
-}
+        }, speed );
 
-class CharacterAnimationManager extends AnimationManager {
-
-    constructor( { canvasElement, width, height, sprites } ) {
-
-        super();
-        this.canvasElement = canvasElement;
-        this.width = width;
-        this.height = height;
-        this.spritesMeta = sprites;
-
-        this.addAnimations();
-    }
-
-    addAnimationsByAction( actionName, shouldRepeat = true, speed = 50, priority ) {
-
-        let defaultAnimationSettings = {
-
-            canvasElement: this.canvasElement,
-            width: this.width,
-            height: this.height,
-            repeat: shouldRepeat,
-            speed: speed,
-        };
-
-        let leftSettings = Object.assign( { 
-            
-            spriteImage: this.spritesMeta[ actionName ].image,
-            spriteMatrix: this.spritesMeta[ actionName ].matrix,
-            spriteRange: this.spritesMeta[ actionName ].range
-
-        }, defaultAnimationSettings );
-
-        this.add( actionName + '-left', new Animation( leftSettings ), priority );
-
-        let rightSettings = Object.assign( { 
-            
-            spriteImage: this.spritesMeta[ actionName ].image,
-            spriteMatrix: this.spritesMeta[ actionName ].matrix,
-            spriteRange: this.spritesMeta[ actionName ].range,
-            flip: true,
-
-        }, defaultAnimationSettings );
-
-        this.add( actionName + '-right', new Animation( rightSettings ), priority );
-    }
-
-    addAnimations() {
-
-        this.addAnimationsByAction( 'walk', true );
-        this.addAnimationsByAction( 'idle', true, 70 );
-        this.addAnimationsByAction( 'attack', false, 40 );
-        this.addAnimationsByAction( 'jump-start', false, 50, 0 );
-        this.addAnimationsByAction( 'jump-stay', false, 50, 0 );
-        this.addAnimationsByAction( 'jump-end', false, 50, 0 );
-    }
-
-    act( name, direction, onFinish ) {
-
-        if ( direction === LEFT ) {
-
-            this.runOne( name + '-left', onFinish );
-        }
-        else if ( direction === RIGHT ) {
-
-            this.runOne( name + '-right', onFinish );
-        }
-    }
-
-    attack( direction ) {
-
-        if ( direction === LEFT ) {
-
-            this.runOnlyFinish( 'attack-left', () => this.idle( direction ) );
-        }
-        else if ( direction === RIGHT ) {
-
-            this.runOnlyFinish( 'attack-right', () => this.idle( direction ) );
-        }
-    }
-
-    walk( direction ) {
-
-        return this.act( 'walk', direction );
-    }
-
-    idle( direction ) {
-
-        return this.act( 'idle', direction );
-    }
-
-    jumpStart( direction, onFinish ) {
-
-        return this.act( 'jump-start', direction, onFinish );
-    }
-
-    jumpStay( direction ) {
-
-        return this.act( 'jump-stay', direction );
-    }
-
-    jumpEnd( direction, onFinish ) {
-
-        return this.act( 'jump-end', direction, onFinish );
     }
 }
 
@@ -318,19 +344,18 @@ class CharacterController {
 
         this.character = character;
 
-        // Suppose only one instance of CharacterController
-        this.keysOfWalkRight = [ 'd', 'D', 'ArrowRight' ];
-        this.keysOfWalkLeft  = [ 'a', 'A', 'ArrowLeft' ];
-        this.keysOfWalkUp    = [ 'w', 'W', 'ArrowUp' ];
-        this.keysOfWalkDown  = [ 's', 'S', 'ArrowDown' ];
+        this.keysDown = {
 
-        this.keysOfWalk = this.keysOfWalkLeft
-                              .concat( this.keysOfWalkRight )
-                              .concat( this.keysOfWalkUp )
-                              .concat( this.keysOfWalkDown );
+            'a': false, 'A': false, 'ArrowLeft': false,
+            'd': false, 'D': false, 'ArrowRight': false,
+            'w': false, 'W': false, 'ArrowUp': false,
+            's': false, 'S': false, 'ArrowDown': false,
 
-        this.keysOfJump = [ ' ' ];
+            'k': false, 'K': false, 'Enter': false,
+            ' ': false
+        }
 
+        this.timerOfJumpDelay = 0;
     }
 
     init() {
@@ -339,26 +364,131 @@ class CharacterController {
         document.body.addEventListener( 'keyup', this.handleKeyUp.bind( this ) );
     }
 
-    handleKeyEvent( event, keys, func ) {
+    isWalkKeyDown( direction ) {
 
-        if ( keys.indexOf( event.key ) >= 0 ) {
+        let isUp = this.keysDown[ 'w' ] || this.keysDown[ 'W' ] || this.keysDown[ 'ArrowUp' ];
+        let isLeft = this.keysDown[ 'a' ] || this.keysDown[ 'A' ] || this.keysDown[ 'ArrowLeft' ];
+        let isDown = this.keysDown[ 's' ] || this.keysDown[ 'S' ] || this.keysDown[ 'ArrowDown' ];
+        let isRight = this.keysDown[ 'd' ] || this.keysDown[ 'D' ] || this.keysDown[ 'ArrowRight' ];
 
-            event.preventDefault();
-            func();
+        if ( direction === UP ) {
+
+            return isUp;
+        }
+        else if ( direction === LEFT ) {
+
+            return isLeft;
+        }
+        else if ( direction === DOWN ) {
+
+            return isDown;
+        }
+        else if ( direction === RIGHT ) {
+
+            return isRight;
+        }
+        else {
+
+            return isUp || isLeft || isDown || isRight;
+        }
+    }
+
+    isJumpKeyDown() {
+
+        return this.keysDown[ ' ' ];
+    }
+
+    isAttackKeyDown() {
+
+        return this.keysDown[ 'k' ] || this.keysDown[ 'K' ] || this.keysDown[ 'Enter' ];
+    }
+
+    handleKeysOfAttack() {
+
+        if ( this.isAttackKeyDown() ) {
+
+            this.character.attack();
+        }
+    }
+
+    handleKeysOfWalkAndJump() {
+
+        if ( this.isWalkKeyDown( UP ) ) {
+
+            this.isJumpKeyDown() ? this.character.jumpUp() : this.character.walkUp();
+        }
+        else if ( this.isWalkKeyDown( LEFT ) ) {
+
+            this.isJumpKeyDown() ? this.character.jumpLeft() : this.character.walkLeft();
+        }
+        else if ( this.isWalkKeyDown( DOWN ) ) {
+
+            this.isJumpKeyDown() ? this.character.jumpDown() : this.character.walkDown();
+        }
+        else if ( this.isWalkKeyDown( RIGHT ) ) {
+
+            this.isJumpKeyDown() ? this.character.jumpRight() : this.character.walkRight();
+        }
+        // If jump key pressed first, then wait a bit to see if a walk key is pressed.
+        else if ( this.isJumpKeyDown() ) {
+
+            this.character.jumpPrepare( () => { 
+
+                if ( this.isWalkKeyDown( LEFT ) ) {
+
+                    this.character.jumpAfterPrepare( LEFT );
+                }
+                else if ( this.isWalkKeyDown( RIGHT ) ) {
+
+                    this.character.jumpAfterPrepare( RIGHT );
+                }
+                else if ( this.isWalkKeyDown( UP ) ) {
+
+                    this.character.jumpAfterPrepare( UP );
+                }
+                else if ( this.isWalkKeyDown( DOWN ) ) {
+
+                    this.character.jumpAfterPrepare( DOWN );
+                }
+                else {
+
+                    this.character.jumpStart();
+                }
+
+            } )
         }
     }
 
     handleKeyDown( event ) {
 
-        this.handleKeyEvent( event, this.keysOfWalkRight, () => this.character.walkRight() );
-        this.handleKeyEvent( event, this.keysOfWalkLeft, () => this.character.walkLeft() );
-        this.handleKeyEvent( event, this.keysOfWalkUp, () => this.character.walkUp() );
-        this.handleKeyEvent( event, this.keysOfWalkDown, () => this.character.walkDown() );
-        this.handleKeyEvent( event, this.keysOfJump, () => this.character.jump() );
+        if ( event.key in this.keysDown ) {
+
+            this.keysDown[ event.key ] = true;
+        }
+        else {
+
+            return;
+        }
+
+        this.handleKeysOfWalkAndJump();
+        this.handleKeysOfAttack();
     }
 
     handleKeyUp( event ) {
 
-       this.handleKeyEvent( event, this.keysOfWalk, () => this.character.idle() );
+        if ( event.key in this.keysDown ) {
+
+            if ( !this.isAttackKeyDown() ) {
+
+                this.character.idle();
+            }
+
+            this.keysDown[ event.key ] = false;
+
+            if ( event.key === ' ' ) {
+
+                clearTimeout( this.timerOfJumpDelay )
+            }
+        }
     }
 }
