@@ -6,24 +6,22 @@
     <meta name="description" content="Basic HTML5 template">
     <meta name="author" content="My Name">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
     <div id="nav">
         <a href="/index.html">Index</a>
         <a href="/animation/animation.html">Animation</a>
         <a href="/animation2/animation.html">Animation 2</a>
-        <a href="/layer">Layer</a>
+        
         <a href="/character/character.html">Character</a>
+        <a href="/layer">Layer</a>
+        <a href="/sprite">Sprite</a>
     </div>
-    <div id="game">
-        <div id="intro">
-            <h1>Super Velociraptor</h1>
-            <h1>The Cavemen Strikes</h1>
-        </div>
-        <canvas id="background"></canvas>
-        <canvas id="velo"></canvas>
-    </div>
-    <script src="index.js"></script>
+    <div class="buttons"></div>
+    <canvas id="game"></canvas>
+    <script src="/global.js"></script>
+    <script src="./sprite.js"></script>
+    <script src="./sprite.test.js"></script>
 </body>
 </html>

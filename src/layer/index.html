@@ -6,7 +6,7 @@
     <meta name="description" content="Basic HTML5 template">
     <meta name="author" content="My Name">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
     <div id="nav">
@@ -16,14 +16,18 @@
         <a href="/layer">Layer</a>
         <a href="/character/character.html">Character</a>
     </div>
-    <div id="game">
-        <div id="intro">
-            <h1>Super Velociraptor</h1>
-            <h1>The Cavemen Strikes</h1>
-        </div>
-        <canvas id="background"></canvas>
-        <canvas id="velo"></canvas>
+    <div class="buttons">
+        <button onclick="lm.init();">Start</button>
+        <button onclick="lm.stop()">Stop</button>
+        <button onclick="velo.moveLeft(10)">Move Left</button>
+        <button onclick="velo.moveRight(10)">Move Right</button>
+        <button onclick="velo.idle()">Idle</button>
+        <button onclick="velo.jump()">Jump</button>
     </div>
-    <script src="index.js"></script>
+    <canvas id="game"></canvas>
+    <script src="/global.js"></script>
+    <script src="/sprite/sprite.js"></script>
+    <script src="./layer.js"></script>
+    <script src="./layer.test.js"></script>
 </body>
 </html>
