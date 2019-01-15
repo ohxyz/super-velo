@@ -34,7 +34,7 @@ class ImageLayer extends Layer {
         super( object );
 
         this.imageSlice = imageSlice;
-        this.flip = flip;
+        this.shouldFlipImage = flip;
     }
 
     draw( context ) {

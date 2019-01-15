@@ -9,18 +9,6 @@ let gameContext = gameElement.getContext( '2d' );
 let backgroundImage = new Image();
 backgroundImage.src = '/assets/background-dev.png';
 
-let walkImage = new Image();
-walkImage.src = '/assets/walk.png';
-
-let idleImage = new Image();
-idleImage.src = '/assets/idle.png';
-
-let attackImage = new Image();
-attackImage.src = '/assets/attack.png';
-
-let jumpImage = new Image();
-jumpImage.src = '/assets/jump.png';
-
 
 class BackgroundLayer extends Layer {
 
@@ -42,16 +30,8 @@ let backgroundLayer = new BackgroundLayer( {
     width: 960,
     height: 480,
     context: gameContext
+
 } );
-
-let idleSlice = new ImageSlice( { 
-
-    image: idleImage,
-    x: 0,
-    y: 0,
-    width: 196,
-    height: 197.5
-} )
 
 let veloLayer = new ImageLayer( {
 
@@ -62,26 +42,47 @@ let veloLayer = new ImageLayer( {
     width: 196,
     height: 197.5,
     context: gameContext,
-    imageSlice: idleSlice,
-    flip: true
-
 } );
 
 
-let sprites = {
+let walkImage = new Image();
+walkImage.src = '/assets/walk.png';
 
-    'walk': { image: walkImage, matrix: [ 4, 4 ] },
-    'idle': { image: idleImage, matrix: [ 4, 5 ] },
-    'attack': { image: attackImage, matrix: [ 4, 2 ] },
-    'jump-prepare': { image: jumpImage, matrix: [ 4, 3 ], range: [ 0, 4 ] },
-    'jump-start': { image: jumpImage, matrix: [ 4, 3 ], range: [ 4, 7 ] },
-    'jump-end': { image: jumpImage, matrix: [ 4, 3 ], range: [ 7, 11 ] },
-}
+let idleImage = new Image();
+idleImage.src = '/assets/idle.png';
+
+let attackImage = new Image();
+attackImage.src = '/assets/attack.png';
+
+let jumpImage = new Image();
+jumpImage.src = '/assets/jump.png';
+
+let walkSpriteImage = new SpriteImage( { 
+
+    image: walkImage,
+    sliceWidth: 196,
+    sliceHeight: 197.5,
+    matrix: [ 4, 4 ]
+} );
+
+let idleSpriteImage = new SpriteImage( { 
+
+    image: idleImage,
+    sliceWidth: 196,
+    sliceHeight: 197.5,
+    matrix: [ 4, 5 ]
+} );
+
+let am = new AnimationManager();
+
+am.add( 'walk', new Animation( { layer: veloLayer, spriteImage: walkSpriteImage } ) );
+
+am.add( 'idle', new Animation( { layer: veloLayer, spriteImage: idleSpriteImage } ) );
 
 let velo = new Character( { 
 
     layer: veloLayer,
-    sprites: sprites,
+    animationManager: am
 
 } )
 
@@ -91,3 +92,27 @@ lm.add( backgroundLayer );
 lm.add( veloLayer );
 
 lm.init();
+
+document.body.addEventListener( 'keydown', event => {
+
+    console.log( event.key );
+
+    if ( event.key === 'a' ) {
+
+        velo.walkLeft( 10 );
+    }
+    else if ( event.key === 'd' ) {
+
+        velo.walkRight( 10 );
+    }
+} );
+
+document.body.addEventListener( 'keyup', event => {
+
+    if ( event.key === 'a' || event.key === 'd' ) {
+
+        event.preventDefault();
+
+        velo.idle();
+    }
+} );

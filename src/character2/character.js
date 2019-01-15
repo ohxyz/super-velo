@@ -1,52 +1,45 @@
-/**
- *
- */
-
-
-let walkSprite = new Image();
-walkSprite.src = '/assets/walk.png';
-
-let walkSpriteImage = new SpriteImage( { 
-
-    image: walkSprite,
-    sliceWidth: 196,
-    sliceHeight: 197.5,
-    matrix: [ 4, 4 ]
-} );
-
-let walkSlices = walkSpriteImage.slice();
-
-
 
 
 class Character {
 
-    constructor( { layer, sprites } ) {
+    constructor( { layer, sprites, animationManager } ) {
 
         this.layer = layer;
-        this.sprites = sprites;
+        this.animationManager = animationManager;
 
+        this.facing = RIGHT;
+        this.idle();
+    }
+
+    idle() {
+
+        let shouldFlipImage = false;
+
+        if ( this.facing === RIGHT ) {
+
+            shouldFlipImage = true;
+        }
+        else if ( this.facing === LEFT ) {
+
+            shouldFlipImage = false;
+        }
+
+        this.animationManager.runOne( { id: 'idle', flip: shouldFlipImage } );
     }
 
     walkLeft( step ) {
 
-        this.layer.shouldFlipImage = false;
+        this.facing = LEFT;
         this.layer.x -= step;
-        this.walk();
+        this.animationManager.runOne( { id: 'walk', flip: false } );
     }
     
     walkRight( step ) {
 
+        this.facing = RIGHT;
         this.layer.shouldFlipImage = true;
         this.layer.x += step;
-        this.walk();
-    }
-
-    walk() {
-
-        let walkAnimation = new Animation( { layer: this.layer, imageSlices: walkSlices } )
-        walkAnimation.run( { repeat: false } );
-
+        this.animationManager.runOne( { id: 'walk', flip: true } );
     }
 
     jumpPrepare() {
