@@ -9,33 +9,20 @@
     <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-    <div class="instruction"></div>
+    <div class="instruction" style="display:none;">
         <span>[W] [A] [S] [D] or Arrow Keys - Walk</span>
-        &nbsp;&nbsp;
+        <span>&nbsp;&nbsp;</span>
         <span>[Space] - Jump</span>
-        &nbsp;&nbsp;
+        <span>&nbsp;&nbsp;</span>
         <span>[K] or [Enter] - Attack</span>
-    <div class="buttons" style="display: none;">
-        <button onclick="velo.move( UP, 5 )">Move Up</button>
-        <button onclick="velo.move( DOWN, 5 )">Move Down</button>
-        <button onclick="velo.move( LEFT, 5 )">Move Left</button>
-        <button onclick="velo.move( RIGHT, 5 )">Move Right</button>
-        <button onclick="velo.jump()">Jump</button>
-        <button onclick="velo.jumpLeft()">Jump Left</button>
-        <button onclick="velo.jumpRight()">Jump Right</button>
-        <button onclick="velo.jumpUp()">Jump Up</button>
-        <button onclick="velo.jumpDown()">Jump Down</button>
-        <button onclick="velo.walkLeft()">Walk Left</button>
-        <button onclick="velo.walkRight()">Walk Right</button>
-        <button onclick="velo.idle()">Idle</button>
-        <button onclick="velo.attack()">Attack</button>
     </div>
-    <div id="game">
-        <canvas id="velo"></canvas>       
+    <div class="buttons">
+        <button onclick="aq.startAll()">Walk Left Start</button>
+        <button onclick="aq.stopAll()">Walk Left Stop</button>
+        <button onclick="aq2.startAll()">Walk Right Start</button>
+        <button onclick="aq2.stopAll()">Walk Right Stop</button>
     </div>
-    <script src="./global.js"></script>
-    <script src="./animation/animation.js"></script>
-    <script src="./character/character.js"></script>
-    <script src="./character/character.test.js"></script>
+    <canvas id="game"></canvas>
+    <script src="./bundle.js"></script>
 </body>
 </html>

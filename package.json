@@ -5,12 +5,19 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "http-server ./src -c-1",
-    "demo": "http-server ./dist -c-1 -p 8081"
+    "dev-2": "http-server ./src -c-1",
+    "demo": "http-server ./dist -c-1 -p 8081",
+    "dev": "webpack-dev-server --config webpack.dev.config.js --open"
   },
   "author": "Dan and Harry",
   "license": "ISC",
   "devDependencies": {
-    "http-server": "^0.11.1"
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.3",
+    "babel-loader": "^8.0.5",
+    "http-server": "^0.11.1",
+    "webpack": "^4.28.4",
+    "webpack-cli": "^3.2.1",
+    "webpack-dev-server": "^3.1.14"
   }
 }

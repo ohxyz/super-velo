@@ -55,5 +55,9 @@ class ImageSlice {
         this.width = width;
         this.height = height;
     }
-
 }
+
+export {
+
+    SpriteImage
+};

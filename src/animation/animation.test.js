@@ -1,169 +1,132 @@
- /**
- * Super Velociraptor
- *
- *
- */
+let gameElement = document.getElementById( 'game' );
+gameElement.width = 960;
+gameElement.height = 480;
 
-/* Game *******************************************************************************************/
+let gameContext = gameElement.getContext( '2d' );
 
+let backgroundImage = new Image();
+backgroundImage.src = '/assets/background-dev.png';
 
-/* Background *************************************************************************************/
+class BackgroundLayer extends Layer {
 
+    draw( context ) {
 
-/* Velo *******************************************************************************************/
+        let pattern = context.createPattern( backgroundImage, 'repeat' );
 
-let idleImage = new Image();
-idleImage.src = '/assets/idle.png';
+        context.fillStyle = pattern;
+        context.fillRect( this.x, this.y, this.width, this.height );
+    }
+}
 
-let idleLeftAnimation = new Animation( { 
+let backgroundLayer = new BackgroundLayer( { 
 
-    canvasElement: document.getElementById( 'idle-left' ), 
-    width: 196,
-    height: 197.5,
-    spriteImage: idleImage,
-    spriteMatrix: [ 4, 5 ],
-    speed: 80
+    id: 'background',
+    x: 0,
+    y: 0,
+    zIndex: 0,
+    width: 960,
+    height: 480,
+    context: gameContext
 } );
 
-let idleRightAnimation = new Animation( { 
-
-    canvasElement: document.getElementById( 'idle-right' ), 
-    width: 196,
-    height: 197.5,
-    spriteImage: idleImage,
-    spriteMatrix: [ 4, 5 ],
-    speed: 80,
-    flip: true
-} );
 
 let walkImage = new Image();
 walkImage.src = '/assets/walk.png';
 
-let walkLeftAnimation = new Animation( { 
-
-    canvasElement: document.getElementById( 'walk-left' ), 
-    width: 196,
-    height: 197,
-    spriteImage: walkImage,
-    spriteMatrix: [ 4, 4 ],
-} );
-
-let walkRightAnimation = new Animation( { 
-
-    canvasElement: document.getElementById( 'walk-right' ), 
-    width: 196,
-    height: 197,
-    spriteImage: walkImage,
-    spriteMatrix: [ 4, 4 ],
-    flip: true
-} );
+let idleImage = new Image();
+idleImage.src = '/assets/idle.png';
 
 let attackImage = new Image();
 attackImage.src = '/assets/attack.png';
 
-let attackLeftAnimation = new Animation( {
-
-    canvasElement: document.getElementById( 'attack-left' ), 
-    width: 196,
-    height: 197,
-    spriteImage: attackImage,
-    spriteMatrix: [ 4, 2 ],
-    repeat: false
-} );
-
-let attackRightAnimation = new Animation( {
-
-    canvasElement: document.getElementById( 'attack-right' ), 
-    width: 196,
-    height: 197,
-    spriteImage: attackImage,
-    spriteMatrix: [ 4, 2 ],
-    flip: true
-
-} );
-
-
 let jumpImage = new Image();
 jumpImage.src = '/assets/jump.png';
 
-let jumpLeftAnimation = new Animation( {
+let walkSpriteImage = new SpriteImage( { 
 
-    canvasElement: document.getElementById( 'jump-left' ), 
-    width: 196,
-    height: 197,
-    spriteImage: jumpImage,
-    spriteMatrix: [ 4, 2 ],
+    image: walkImage,
+    sliceWidth: 196,
+    sliceHeight: 197.5,
+    matrix: [ 4, 4 ]
+} );
+
+let idleSpriteImage = new SpriteImage( { 
+
+    image: idleImage,
+    sliceWidth: 196,
+    sliceHeight: 197.5,
+    matrix: [ 4, 5 ]
 } );
 
 
-let jumpLeftUpAnimation = new Animation( {
+let veloLayer = new ImageLayer( {
 
-    canvasElement: document.getElementById( 'jump-left-up' ), 
-    width: 196,
-    height: 197.5,
-    spriteImage: jumpImage,
-    spriteMatrix: [ 4, 3 ],
-    spriteRange: [ 0, 7 ],
-
-    repeat: false,
-    // speed: 500,
-
-} );
-
-let jumpLeftDownAnimation = new Animation( {
-
-    canvasElement: document.getElementById( 'jump-left-down' ), 
+    id: 'velo',
+    x: 64,
+    y: 64,
+    zIndex: 2,
     width: 196,
     height: 197.5,
-    spriteImage: jumpImage,
-    spriteMatrix: [ 4, 3 ],
-    spriteRange: [ 7, 11 ],
-    repeat: false,
-    // speed: 500,
+    context: gameContext,
 } );
 
-let jumpRightAnimation = new Animation( {
 
-    canvasElement: document.getElementById( 'jump-right' ), 
-    width: 196,
-    height: 197,
-    spriteImage: jumpImage,
-    spriteMatrix: [ 4, 3 ],
-    spriteRange: [ 7, 11 ],
-    flip: true,
-    repeat: false,
-} );
+class MoveAnimation extends Animation {
 
-let jumpStayLeftAnimation = new Animation( {
+    constructor( { direction = LEFT, ...object } ) {
 
-    canvasElement: document.getElementById( 'jump-stay-left' ), 
-    width: 196,
-    height: 197,
-    spriteImage: jumpImage,
-    spriteMatrix: [ 4, 3 ],
-    spriteRange: [ 7, 7 ],
-    repeat: false,
-} );
+        super( object );
 
-jumpImage.onload = () => {
+        this.direction = direction;
+    }
 
-    jumpStayLeftAnimation.animate();
+    animate() {
+
+        if ( this.direction === LEFT ) {
+
+            this.layer.x -= 5;
+        }
+        else if ( this.direction === RIGHT ) {
+
+            this.layer.x += 5;
+        }
+
+        this.isStarted = false;
+    }
 }
 
-let animationManager = new AnimationManager();
+let aq = new AnimationQueue(  { id: 'walk-left' } );
+let a1 = new SpriteAnimation( { layer: veloLayer, spriteImage: walkSpriteImage } );
+let a2 = new MoveAnimation( { layer: veloLayer, direction: LEFT } )
 
-animationManager.add( 'idle-left', idleLeftAnimation );
-animationManager.add( 'idle-right', idleRightAnimation );
-animationManager.add( 'walk-left', walkLeftAnimation );
-animationManager.add( 'walk-right', walkRightAnimation );
-animationManager.add( 'attack-left', attackLeftAnimation );
-animationManager.add( 'attack-right', attackRightAnimation );
-animationManager.add( 'jump-left', jumpLeftAnimation );
-animationManager.add( 'jump-right', jumpRightAnimation );
-animationManager.add( 'jump-left-up', jumpLeftUpAnimation );
-animationManager.add( 'jump-left-down', jumpLeftDownAnimation );
+aq.add( a1, a2 );
 
-// animationManager.add( 'jump-stay-left', jumpStayLeftAnimation );
-// animationManager.add( 'jump-stay-right', jumpStayRightAnimation );
+let aq2 = new AnimationQueue(  { id: 'walk-right' } );
+let a3 = new SpriteAnimation( { layer: veloLayer, flip: true, spriteImage: walkSpriteImage } );
+let a4 = new MoveAnimation( { layer: veloLayer, direction: RIGHT } )
 
-animationManager.runAll();
+aq2.add( a3, a4 );
+
+let lm = new LayerManager( gameContext );
+
+lm.add( backgroundLayer );
+lm.add( veloLayer );
+
+lm.init();
+
+
+document.body.addEventListener( 'keydown', event => {
+
+    console.log( event.key );
+
+    if ( event.key === 'a' ) {
+
+        aq2.stopAll();
+        aq.startAll();
+    }
+    else if ( event.key === 'd' ) {
+
+        aq.stopAll();
+        aq2.startAll();
+    }
+} );

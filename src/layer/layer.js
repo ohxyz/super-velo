@@ -2,7 +2,6 @@
  * Layer module
  */
 
-
 class Layer {
     
     constructor( { id, x, y, zIndex, width, height } ) {
@@ -73,12 +72,12 @@ class ImageLayer extends Layer {
     }
 }
 
-
 class LayerManager {
 
-    constructor( context ) {
+    constructor( context, refreshRate = 60 ) {
 
         this.context = context;
+        this.refreshRate = refreshRate;
         this.layers = [];
         this.timer = 0;
     }
@@ -134,8 +133,8 @@ class LayerManager {
 
     init() {
 
-        const INTERVAL = Math.floor( 1000 / REFRESH_RATE );
-        console.log( INTERVAL );
+        const INTERVAL = Math.floor( 1000 / this.refreshRate );
+
         let count = 0;
 
         this.timer = setInterval( () => { 
@@ -153,3 +152,10 @@ class LayerManager {
         clearInterval( this.timer );
     }
 }
+
+export {
+
+    Layer,
+    ImageLayer,
+    LayerManager
+};

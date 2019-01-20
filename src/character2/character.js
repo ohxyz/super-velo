@@ -1,5 +1,3 @@
-
-
 class Character {
 
     constructor( { layer, animationManager } ) {
@@ -62,5 +60,10 @@ class Character {
 
         }, 1000 )
     }
+}
+
+export {
+    
+    Character
 }
 
