@@ -2,7 +2,7 @@
 
 class Character {
 
-    constructor( { layer, sprites, animationManager } ) {
+    constructor( { layer, animationManager } ) {
 
         this.layer = layer;
         this.animationManager = animationManager;

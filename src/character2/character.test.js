@@ -9,7 +9,6 @@ let gameContext = gameElement.getContext( '2d' );
 let backgroundImage = new Image();
 backgroundImage.src = '/assets/background-dev.png';
 
-
 class BackgroundLayer extends Layer {
 
     draw( context ) {
@@ -73,11 +72,11 @@ let idleSpriteImage = new SpriteImage( {
     matrix: [ 4, 5 ]
 } );
 
-let am = new AnimationManager();
+let am = new AnimationManager( );
 
-am.add( 'walk', new Animation( { layer: veloLayer, spriteImage: walkSpriteImage } ) );
+am.add( 'walk', new SpriteAnimation( { layer: veloLayer, spriteImage: walkSpriteImage } ) );
 
-am.add( 'idle', new Animation( { layer: veloLayer, spriteImage: idleSpriteImage } ) );
+am.add( 'idle', new SpriteAnimation( { layer: veloLayer, spriteImage: idleSpriteImage } ) );
 
 let velo = new Character( { 
 

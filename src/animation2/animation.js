@@ -1,19 +1,50 @@
 class Animation {
 
-    constructor( { layer = null, 
-                   interval = 50, 
-                   repeat = true,
-                   spriteImage = null } = {} ) {
+    constructor( { layer = null, interval = 50 } = {} ) {
 
         this.layer = layer;
         this.animationInterval = interval;
-        this.shouldRepeat = repeat;
-        this.spriteImage = spriteImage;
 
-        this.sliceCount = 0;
         this.timerId = 0;
         this.isStarted = false;
+    }
+
+    // Todo: create basic functionality for simple animation
+    animate() {
+
+    }
+
+    start() {
+ 
+        if ( this.isStarted ) {
+
+            return;
+        }
+
+        this.isStarted = true;
+        this.animate();
+    }
+
+    stop() {
+
+        clearInterval( this.timerId );
+        clearTimeout( this.timerId );
+
+        this.isStarted = false;
+    }
+}
+
+class SpriteAnimation extends Animation { 
+
+    constructor( { repeat = true, spriteImage = null, flip = false, ...object } ) {
+
+        super( object );
+
+        this.sliceCount = 0;
         this.imageSlices = [];
+        this.shouldRepeat = repeat;
+        this.spriteImage = spriteImage;
+        this.shouldFlipImage = flip;
 
         this.getImageSlices();
     }
@@ -29,7 +60,9 @@ class Animation {
         this.imageSlices = this.spriteImage.slice();
     }
 
-    animate( onFinish = () => {} ) {
+    animate() {
+
+        this.layer.shouldFlipImage = this.shouldFlipImage;
 
         this.timerId = setInterval( () => {
 
@@ -40,8 +73,6 @@ class Animation {
                 this.sliceCount ++;
             }
             else {
-
-                onFinish();
 
                 if ( this.shouldRepeat === false ) {
 
@@ -56,41 +87,47 @@ class Animation {
         }, this.animationInterval );
     }
 
-    start( shouldFlipImage = false, onFinish = () => {} ) {
-
-        this.layer.shouldFlipImage = shouldFlipImage;
- 
-        if ( this.isStarted ) {
-
-            return;
-        }
-
-        this.animate( onFinish );
-        this.isStarted = true;
-    }
-
-    stop() {
-
-        clearInterval( this.timerId );
-        this.isStarted = false;
-    }
 }
 
+class AnimationQueue {
 
-class AnimationContainer {
-
-    constructor( { id, priority, animation } ) {
+    constructor( { id, priority = 0, animations = [] } ) {
 
         this.id = id;
         this.priority = priority;
-        this.animation = animation;
+        this.animations = animations;
+        this.isAllStarted = false;
     }
 
-    stopAnimation() {
+    add( ...animations ) {
 
-        this.animation.stop();
+        animations.forEach( animation => { 
+
+            this.animations.push( animation );
+        } )
+    }
+
+    startAll() {
+
+        this.animations.forEach( animation => {
+
+            animation.start();
+        } );
+
+        this.isAllStarted = false;
+    }
+
+    stopAll() {
+
+        this.animations.forEach( animation => {
+
+            animation.stop();
+        } );
+
+        this.isAllStarted = false;
     }
 }
+
 
 /**
  * 
@@ -106,40 +143,40 @@ class AnimationManager {
 
     constructor() {
 
-        this.animationContainers = [];
-        this.currentAnimationContainer = null;
+        this.animationQueue = [];
+        this.currentAnimationQueue = null;
 
         this.currentAnimationId = '';
         this.currentAnimation = null;
     }
 
-    add( id, animation, priority = 1 ) {
+    addQueue( { id, priority = 1, animation } ) {
 
-        for ( let container of this.animationContainers ) {
+        for ( let queue of this.animationQueue ) {
 
-            if ( container.id === id ) {
+            if ( queue.id === id ) {
 
                 throw new Error( `[Velo] Animation already exists. Animation ID: ${id}\n` );
             }
         }
 
-        let container = new AnimationContainer( {
+        let queue = new AnimationQueue( {
 
             id: id, 
-            animation: animation, 
+            animations: [ animation ], 
             priority: priority 
         } );
 
-        this.animationContainers.push( container );
+        this.animationQueue.push( queue );
     }
 
     get( id ) {
 
-        for ( let container of this.animationContainers ) {
+        for ( let queue of this.animationQueue ) {
 
-            if ( container.id === id ) {
+            if ( queue.id === id ) {
 
-                return container;
+                return queue;
             }
         }
 
@@ -151,34 +188,34 @@ class AnimationManager {
      * running animation must be stopped, unless it has a higher priority.
      *
      */
-    runOne( { id, flip = false, onFinish = () => {} } ) {
+    runOne( { id, onFinish = () => {} } ) {
 
-        let newAnimationContainer = this.get( id );
+        let newAnimationQueue = this.get( id );
 
-        if ( newAnimationContainer === null ) {
+        if ( newAnimationQueue === null ) {
 
             throw new Error( `[Velo] Animation (ID: ${id}) not found.\n` );
         }
 
-        if ( this.currentAnimationContainer !== null 
-                && this.currentAnimationContainer.id !== id 
-                && this.currentAnimationContainer.animation.isStarted ) {
+        if ( this.currentAnimationQueue !== null 
+                && this.currentAnimationQueue.id !== id 
+                && this.currentAnimationQueue.isAllStarted ) {
     
-            // When new animation container's priority is lower(>) than the current one.
-            if ( newAnimationContainer.priority > this.currentAnimationContainer.priority ) {
+            // When new animation queue's priority is lower(>) than the current one.
+            if ( newAnimationQueue.priority > this.currentAnimationQueue.priority ) {
 
                 return;
             }
             else {
 
-                this.currentAnimationContainer.animation.stop();
+                this.currentAnimationQueue.stopAll();
             }
         }
 
-        newAnimationContainer.animation.start( flip, onFinish );
-        this.currentAnimationContainer = newAnimationContainer;
+        newAnimationQueue.animation.start( onFinish );
+        this.currentAnimationQueue = newAnimationQueue;
 
-        return newAnimationContainer;
+        return newAnimationQueue;
     }
 
     /**
@@ -188,57 +225,33 @@ class AnimationManager {
      */
     runOnlyFinish( id, onFinish ) {
 
-        let newAnimationContainer = this.get( id );
+        let newAnimationQueue = this.get( id );
 
-        if ( newAnimationContainer === null ) {
+        if ( newAnimationQueue === null ) {
 
             throw new Error( `[Velo] Animation (ID: ${id}) not found.\n` );
         }
 
-        if ( this.currentAnimationContainer !== null 
-                && this.currentAnimationContainer.id !== id ) {
+        if ( this.currentAnimationQueue !== null 
+                && this.currentAnimationQueue.id !== id ) {
 
-            if ( this.currentAnimationContainer.animation.isStarted
-                    && newAnimationContainer.priority < this.currentAnimationContainer.priority ) {
+            if ( this.currentAnimationQueue.isAllStarted
+                    && newAnimationQueue.priority < this.currentAnimationQueue.priority ) {
 
-                this.currentAnimationContainer.animation.stop();
+                this.currentAnimationQueue.stopAll();
             }
         }
 
-        if ( this.currentAnimationContainer.animation.isStarted ) {
+        if ( this.currentAnimationQueue.isAllStarted ) {
 
-            return this.currentAnimationContainer;
+            return this.currentAnimationQueue;
         }
         else {
 
-            newAnimationContainer.animation.start( onFinish );
-            this.currentAnimationContainer = newAnimationContainer;
+            newAnimationQueue.startAll( onFinish );
+            this.currentAnimationQueue = newAnimationQueue;
 
-            return this.currentAnimationContainer;
-        }
-    }
-
-    runAll() {
-
-        for ( let container of this.animationContainers ) {
-
-            container.animation.start();
-
-        }
-    }
-
-    stopAll() {
-
-        for ( let container of this.animationContainers ) {
-
-            try {
-
-                container.animation.stop();
-            }
-            catch( error ) {
-
-                console.log( error );
-            }
+            return this.currentAnimationQueue;
         }
     }
 }

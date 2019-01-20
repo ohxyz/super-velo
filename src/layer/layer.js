@@ -55,8 +55,8 @@ class ImageLayer extends Layer {
             context.scale( 1, 1 );
         }
 
-        context.fillStyle = 'green';
-        context.fillRect( this.x, this.y, this.width, this.height );
+        // context.fillStyle = 'green';
+        // context.fillRect( this.x, this.y, this.width, this.height );
 
         context.drawImage(
 
