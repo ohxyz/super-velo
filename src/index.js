@@ -3,6 +3,10 @@ import { Layer, ImageLayer, LayerManager } from './layer/layer.js';
 import { SpriteImage } from './sprite/sprite.js';
 import { Animation, AnimationQueue, SpriteAnimation } from './animation/animation.js';
 
+import backgroundImageSource from '../assets/background-dev.png';
+import walkImageSource from '../assets/walk.png';
+import idleImageSource from '../assets/idle.png';
+
 let gameElement = document.getElementById( 'game' );
 gameElement.width = 960;
 gameElement.height = 480;
@@ -10,7 +14,7 @@ gameElement.height = 480;
 let gameContext = gameElement.getContext( '2d' );
 
 let backgroundImage = new Image();
-backgroundImage.src = '/assets/background-dev.png';
+backgroundImage.src = backgroundImageSource;
 
 class BackgroundLayer extends Layer {
 
@@ -36,16 +40,10 @@ let backgroundLayer = new BackgroundLayer( {
 
 
 let walkImage = new Image();
-walkImage.src = '/assets/walk.png';
+walkImage.src = walkImageSource;
 
 let idleImage = new Image();
-idleImage.src = '/assets/idle.png';
-
-let attackImage = new Image();
-attackImage.src = '/assets/attack.png';
-
-let jumpImage = new Image();
-jumpImage.src = '/assets/jump.png';
+idleImage.src = idleImageSource;
 
 let walkSpriteImage = new SpriteImage( { 
 
