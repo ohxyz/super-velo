@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev-2": "http-server ./src -c-1",
-    "demo": "http-server ./dist -c-1 -p 8081",
-    "dev": "webpack-dev-server --config webpack.dev.config.js --open"
+    "demo": "http-server ./dist -c-1 -p 8080",
+    "build": "webpack --config webpack.dev.config.js",
+    "dev": "webpack-dev-server --open --config webpack.dev.config.js"
   },
   "author": "Dan and Harry",
   "license": "ISC",
