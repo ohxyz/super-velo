@@ -1,22 +1,18 @@
+import { UP, RIGHT, DOWN, LEFT } from '../../constants.js';
+import { Layer, ImageLayer, LayerManager, BackgroundLayer } from '../../layer';
+import { SpriteImage } from '../../sprite/sprite.js';
+import { MoveAnimation, Animation, AnimationQueue, SpriteAnimation, AnimationManager } from '../';
+import backgroundImageSource from './images/background-dev.png';
+import walkImageSource from './images/walk.png';
+import idleImageSource from './images/idle.png';
+
 let gameElement = document.getElementById( 'game' );
 gameElement.width = 960;
 gameElement.height = 480;
-
 let gameContext = gameElement.getContext( '2d' );
 
 let backgroundImage = new Image();
-backgroundImage.src = '/assets/background-dev.png';
-
-class BackgroundLayer extends Layer {
-
-    draw( context ) {
-
-        let pattern = context.createPattern( backgroundImage, 'repeat' );
-
-        context.fillStyle = pattern;
-        context.fillRect( this.x, this.y, this.width, this.height );
-    }
-}
+backgroundImage.src = backgroundImageSource;
 
 let backgroundLayer = new BackgroundLayer( { 
 
@@ -26,21 +22,17 @@ let backgroundLayer = new BackgroundLayer( {
     zIndex: 0,
     width: 960,
     height: 480,
-    context: gameContext
+    context: gameContext,
+    image: backgroundImage
 } );
 
 
 let walkImage = new Image();
-walkImage.src = '/assets/walk.png';
+walkImage.src = walkImageSource;
 
 let idleImage = new Image();
-idleImage.src = '/assets/idle.png';
+idleImage.src = idleImageSource;
 
-let attackImage = new Image();
-attackImage.src = '/assets/attack.png';
-
-let jumpImage = new Image();
-jumpImage.src = '/assets/jump.png';
 
 let walkSpriteImage = new SpriteImage( { 
 
@@ -70,31 +62,6 @@ let veloLayer = new ImageLayer( {
     context: gameContext,
 } );
 
-
-class MoveAnimation extends Animation {
-
-    constructor( { direction = LEFT, ...object } ) {
-
-        super( object );
-
-        this.direction = direction;
-    }
-
-    animate() {
-
-        if ( this.direction === LEFT ) {
-
-            this.layer.x -= 5;
-        }
-        else if ( this.direction === RIGHT ) {
-
-            this.layer.x += 5;
-        }
-
-        this.isStarted = false;
-    }
-}
-
 let aq = new AnimationQueue(  { id: 'walk-left' } );
 let a1 = new SpriteAnimation( { layer: veloLayer, spriteImage: walkSpriteImage } );
 let a2 = new MoveAnimation( { layer: veloLayer, direction: LEFT } )
@@ -107,6 +74,10 @@ let a4 = new MoveAnimation( { layer: veloLayer, direction: RIGHT } )
 
 aq2.add( a3, a4 );
 
+let am = new AnimationManager();
+am.addQueue( aq );
+am.addQueue( aq2 );
+
 let lm = new LayerManager( gameContext );
 
 lm.add( backgroundLayer );
@@ -114,6 +85,7 @@ lm.add( veloLayer );
 
 lm.init();
 
+window.am = am;
 
 document.body.addEventListener( 'keydown', event => {
 

@@ -1,12 +1,3 @@
-import { UP, RIGHT, DOWN, LEFT, REFRESH_RATE } from '../../src/global.js';
-import { Layer, ImageLayer, LayerManager } from '../../src/layer/layer.js';
-import { SpriteImage } from '../../src/sprite/sprite.js';
-import { Animation, AnimationQueue, SpriteAnimation } from '../../src/animation/animation.js';
-
-import backgroundImageSource from '../../assets/background-dev.png';
-import walkImageSource from '../../assets/walk.png';
-import idleImageSource from '../../assets/idle.png';
-
 let gameElement = document.getElementById( 'game' );
 gameElement.width = 960;
 gameElement.height = 480;
@@ -14,7 +5,7 @@ gameElement.height = 480;
 let gameContext = gameElement.getContext( '2d' );
 
 let backgroundImage = new Image();
-backgroundImage.src = backgroundImageSource;
+backgroundImage.src = '/assets/background-dev.png';
 
 class BackgroundLayer extends Layer {
 
@@ -40,11 +31,16 @@ let backgroundLayer = new BackgroundLayer( {
 
 
 let walkImage = new Image();
-walkImage.src = walkImageSource;
+walkImage.src = '/assets/walk.png';
 
 let idleImage = new Image();
-idleImage.src = idleImageSource;
+idleImage.src = '/assets/idle.png';
 
+let attackImage = new Image();
+attackImage.src = '/assets/attack.png';
+
+let jumpImage = new Image();
+jumpImage.src = '/assets/jump.png';
 
 let walkSpriteImage = new SpriteImage( { 
 
@@ -74,30 +70,6 @@ let veloLayer = new ImageLayer( {
     context: gameContext,
 } );
 
-
-class MoveAnimation extends Animation {
-
-    constructor( { direction = LEFT, ...object } ) {
-
-        super( object );
-
-        this.direction = direction;
-    }
-
-    animate() {
-
-        if ( this.direction === LEFT ) {
-
-            this.layer.x -= 5;
-        }
-        else if ( this.direction === RIGHT ) {
-
-            this.layer.x += 5;
-        }
-
-        this.isStarted = false;
-    }
-}
 
 let aq = new AnimationQueue(  { id: 'walk-left' } );
 let a1 = new SpriteAnimation( { layer: veloLayer, spriteImage: walkSpriteImage } );

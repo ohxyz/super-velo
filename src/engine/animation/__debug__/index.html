@@ -9,10 +9,9 @@
 </head>
 <body>
     <div class="buttons">
-        <button onclick="aq.startAll()">Walk Left Start</button>
-        <button onclick="aq.stopAll()">Walk Left Stop</button>
-        <button onclick="aq2.startAll()">Walk Right Start</button>
-        <button onclick="aq2.stopAll()">Walk Right Stop</button>
+        <button onclick="am.runOne( { id: 'walk-left' } )">Walk Left Start</button>
+        <button onclick="am.runOne( { id: 'walk-right' } )">Walk Right Start</button>
+        <button onclick="am.stopAllQueues()">Walk Stop</button>
     </div>
     <canvas id="game"></canvas>
     <script src="bundle.js"></script>

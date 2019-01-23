@@ -9,8 +9,8 @@ module.exports = env => {
 
         let moduleName = env.module;
 
-        entryPath = path.join( __dirname, `dev/${moduleName}/index.js` );
-        outputPath = path.join( __dirname, `dev/${moduleName}/` );
+        entryPath = path.join( __dirname, `src/engine/${moduleName}/__debug__/index.js` );
+        outputPath = path.join( __dirname, `src/engine/${moduleName}/__debug__` );
     }
 
     console.log( '[Entry]   ', entryPath );
