@@ -32,9 +32,9 @@ class Game {
         this.layerManager.init();
     }
 
-    addLayer( layer ) {
+    addObject( gameObject ) {
 
-        this.layerManager.add( layer );
+        this.layerManager.add( gameObject.layer );
     }
 }
 

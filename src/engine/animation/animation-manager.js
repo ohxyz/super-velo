@@ -88,11 +88,11 @@ class AnimationManager {
             }
             else {
 
-                this.currentAnimationQueue.stopAll();
+                this.currentAnimationQueue.stop();
             }
         }
 
-        newAnimationQueue.startAll();
+        newAnimationQueue.run();
         this.currentAnimationQueue = newAnimationQueue;
         this.currentAnimationQueue.areAllStarted = true;
 
@@ -119,7 +119,7 @@ class AnimationManager {
             if ( this.currentAnimationQueue.areAllStarted
                     && newAnimationQueue.priority < this.currentAnimationQueue.priority ) {
 
-                this.currentAnimationQueue.stopAll();
+                this.currentAnimationQueue.stop();
             }
         }
 
@@ -129,7 +129,7 @@ class AnimationManager {
         }
         else {
 
-            newAnimationQueue.startAll();
+            newAnimationQueue.run();
             this.currentAnimationQueue = newAnimationQueue;
 
             return this.currentAnimationQueue;
@@ -140,7 +140,7 @@ class AnimationManager {
 
         this.animationQueues.forEach( queue => { 
 
-            queue.stopAll();
+            queue.stop();
 
         } );
     }

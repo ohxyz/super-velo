@@ -3,8 +3,9 @@ import { SpriteImage } from './engine/sprite';
 import { AnimationManager, AnimationQueue, SpriteAnimation, MoveAnimation } from './engine/animation';
 import { GameObject } from './engine/game';
 import { createAnimationManager } from './velo-animation-manager.js';
+import { ImageLayer } from './engine/layer';
 
-class Velo extends GameObject{
+class Velo extends GameObject {
 
     constructor( layer ) {
         
@@ -19,6 +20,7 @@ class Velo extends GameObject{
     init() {
 
         this.animationManager = createAnimationManager( this.layer );
+        this.idle();
     }
 
     walkByFacing() {
@@ -60,6 +62,16 @@ class Velo extends GameObject{
         this.walkByFacing();
     }
 
+    walkLeft() {
+
+        return this.walk( LEFT );
+    }
+
+    walkRight() {
+
+        return this.walk( RIGHT );
+    }
+
     idle() {
 
         if ( this.facing === LEFT ) {
@@ -72,20 +84,19 @@ class Velo extends GameObject{
         }
     }
 
+    jump() {
+
+
+    }
+
     jumpStart() {
 
         
     }
 
-    jump() {
-
-
-
-    }
-
     jumpPrepare() {
 
-
+        this.bounce();
     }
 
     stop() {
@@ -94,8 +105,21 @@ class Velo extends GameObject{
     }
 }
 
+
+let veloLayer = new ImageLayer( {
+
+    id: 'velo',
+    x: 64,
+    y: 64,
+    zIndex: 2,
+    width: 196,
+    height: 197.5,
+} )
+
+let velo = new Velo( veloLayer );
+
 export {
     
-    Velo
-}
+    velo
+};
 

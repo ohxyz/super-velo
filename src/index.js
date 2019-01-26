@@ -4,13 +4,8 @@ import { AnimationManager } from './engine/animation';
 import { BackgroundLayer, LayerManager, ImageLayer } from './engine/layer';
 import { Game, CharacterController } from './engine/game';
 
-import { Velo } from './velo';
-
-import backgroundImageSource from './assets/background-dev.png';
-import walkImageSource from './assets/walk.png';
-
-let backgroundImage = new Image();
-backgroundImage.src = backgroundImageSource;
+import { velo } from './velo';
+import { backgroundImage } from './background.js';
 
 let game = new Game( {
 
@@ -21,22 +16,8 @@ let game = new Game( {
 
 } );
 
-let veloLayer = new ImageLayer( {
-
-    id: 'velo',
-    x: 64,
-    y: 64,
-    zIndex: 2,
-    width: 196,
-    height: 197.5,
-} )
-
-let velo = new Velo( veloLayer );
-
-game.addLayer( veloLayer );
+game.addObject( velo );
 game.init();
-
-velo.idle();
 
 let controller = new CharacterController( velo );
 

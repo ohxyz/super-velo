@@ -17,7 +17,7 @@ class AnimationQueue {
         } )
     }
 
-    startAll() {
+    run() {
 
         this.animations.forEach( animation => {
 
@@ -27,7 +27,7 @@ class AnimationQueue {
         this.areAllStarted = true;
     }
 
-    stopAll() {
+    stop() {
 
         this.animations.forEach( animation => {
 

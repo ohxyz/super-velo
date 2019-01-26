@@ -14,12 +14,6 @@ class Layer {
         this.height = height;
     }
 
-    moveTo( x, y ) {
-
-        this.x = x;
-        this.y = y;
-    }
-
     draw( context ) {
 
 
@@ -54,8 +48,8 @@ class ImageLayer extends Layer {
             context.scale( 1, 1 );
         }
 
-        // context.fillStyle = 'green';
-        // context.fillRect( this.x, this.y, this.width, this.height );
+        context.fillStyle = 'green';
+        context.fillRect( this.x, this.y, this.width, this.height );
 
         context.drawImage(
 
