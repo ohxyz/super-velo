@@ -72,6 +72,26 @@ class Velo extends GameObject {
         return this.walk( RIGHT );
     }
 
+    jumpLeft() {
+
+        return this.bounce( LEFT );
+    }
+
+    jumpRight() {
+
+        return this.bounce( RIGHT );
+    }
+
+    jumpUp() {
+
+        return this.bounce( UP );
+    }
+
+    jumpDown() {
+
+        return this.bounce( DOWN );
+    }
+
     idle() {
 
         if ( this.facing === LEFT ) {
@@ -109,8 +129,8 @@ class Velo extends GameObject {
 let veloLayer = new ImageLayer( {
 
     id: 'velo',
-    x: 64,
-    y: 64,
+    x: 128,
+    y: 128,
     zIndex: 2,
     width: 196,
     height: 197.5,

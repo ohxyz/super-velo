@@ -1,11 +1,11 @@
-import { UP, RIGHT, DOWN, LEFT } from '../../constants.js';
-import { bounce } from '../../util/easing';
+import { NONE, UP, RIGHT, DOWN, LEFT } from '../../constants.js';
 
 class GameObject {
 
     constructor( layer ) {
 
         this.layer = layer;
+        this.isBounceStarted = false;
     }
 
     moveTo( x, y ) {
@@ -14,23 +14,53 @@ class GameObject {
         this.layer.y = y;
     }
 
-    bounce( { startHeight = 50,
-              period = 500, 
-              interval = 20, 
-              x = 0 , 
-              y = 0 } = {} ) {
+    bounce( direction = NONE, { startHeight = 50,
+                                stepSizeX = 5,
+                                stepSizeY = 5,
+                                period = 500, 
+                                interval = 20 } = {} ) {
+
+        if ( this.isBounceStarted ) {
+
+            return;
+        }
+
+        this.isBounceStarted = true;
+
+        let eachStepX = 0;
+        let eachStepY = 0;
+
+        if ( direction === LEFT ) {
+
+            eachStepX = -stepSizeX;
+            eachStepY = 0;
+        }
+        else if ( direction === RIGHT ) {
+
+            eachStepX = stepSizeX;
+            eachStepY = 0;
+        }
+        else if( direction === UP ) {
+
+            eachStepX = 0;
+            eachStepY = stepSizeY;
+        }
+        else if( direction === DOWN ) {
+
+            eachStepX = 0;
+            eachStepY = -stepSizeY;
+        }
 
         let total = parseInt( ( period / 2 ) / interval, 10 );
         let count = 1;
 
-        let timerId = setInterval( () => { 
+        let timerId = setInterval( () => {
 
             if ( count < total ) {
 
                 let eachHeight = parseInt( startHeight / count );
-                this.layer.y -= eachHeight;
-
-                console.log( count, eachHeight );
+                this.layer.y -= ( eachHeight + eachStepY );
+                this.layer.x += eachStepX;
                 
                 count ++;
             }
@@ -45,9 +75,14 @@ class GameObject {
                     if ( count > 0 ) {
 
                         let eachHeight = parseInt( startHeight / count );
-                        this.layer.y += eachHeight;
-                        console.log( count, eachHeight );
+                        this.layer.y += ( eachHeight - eachStepY );
+                        this.layer.x += eachStepX;
                         
+                    }
+                    else {
+
+                        clearInterval( timerId );
+                        this.isBounceStarted = false ;
                     }
 
                 }, interval );
