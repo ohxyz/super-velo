@@ -1,6 +1,7 @@
-import { SpriteImage } from './sprite.js';
+import { SpriteImage, ImageSlice } from './sprite.js';
 
 export {
 
-    SpriteImage
-}
+    SpriteImage,
+    ImageSlice
+};

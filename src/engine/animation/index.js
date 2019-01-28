@@ -3,12 +3,15 @@ import { AnimationManager } from './animation-manager.js';
 import { AnimationQueue } from './animation-queue.js';
 import { Animation } from './animation.js';
 import { SpriteAnimation } from './sprite-animation';
+import { StaticSpriteAnimation } from './static-sprite-animation';
+
 
 export {
 
     Animation,
-    MoveAnimation,
-    SpriteAnimation,
     AnimationQueue,
     AnimationManager,
+    MoveAnimation,
+    SpriteAnimation,
+    StaticSpriteAnimation,
 }

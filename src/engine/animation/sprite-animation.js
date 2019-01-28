@@ -1,5 +1,5 @@
 import { Animation } from './animation.js';
-import { SpriteImage } from '../sprite/sprite.js';
+import { SpriteImage } from '../sprite';
 
 class SpriteAnimation extends Animation { 
 

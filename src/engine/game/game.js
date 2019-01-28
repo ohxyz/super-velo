@@ -41,4 +41,4 @@ class Game {
 export {
 
     Game
-}
+};

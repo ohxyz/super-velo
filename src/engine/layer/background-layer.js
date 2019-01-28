@@ -20,4 +20,4 @@ class BackgroundLayer extends Layer {
 export {
 
     BackgroundLayer,
-}
+};

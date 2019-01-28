@@ -59,5 +59,6 @@ class ImageSlice {
 
 export {
 
-    SpriteImage
+    SpriteImage,
+    ImageSlice,
 };
