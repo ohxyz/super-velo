@@ -14,10 +14,45 @@ class GameObject {
         this.layer.y = y;
     }
 
+    stay( period = 1000 ) {
+
+        return new Promise( ( resolve, reject ) => { 
+
+            setTimeout( () => { resolve() }, period );
+
+        } );
+
+    }
+
+    move( direction = None, step = 5 ) {
+
+        if ( direction === UP ) {
+
+            this.layer.y -= step;
+        }
+        else if ( direction === RIGHT ) {
+
+            this.layer.x += step;
+        }
+        else if ( direction === DOWN ) {
+
+            this.layer.y += step;
+        }
+        else if ( direction === LEFT ) {
+
+            this.layer.x -= step;
+        }
+
+        return new Promise( ( resolve, reject ) => { 
+
+            resolve();
+        } )
+    }
+
     bounce( direction = NONE, { startHeight = 50,
                                 stepSizeX = 5,
                                 stepSizeY = 5,
-                                period = 500, 
+                                period = 1000, 
                                 interval = 20 } = {} ) {
 
         if ( this.isBounceStarted ) {
@@ -54,68 +89,50 @@ class GameObject {
         let total = parseInt( ( period / 2 ) / interval, 10 );
         let count = 1;
 
-        let timerId = setInterval( () => {
+        const executorFn = ( resolve, reject ) => {
 
-            if ( count < total ) {
+            let timerId = setInterval( () => {
 
-                let eachHeight = parseInt( startHeight / count );
-                this.layer.y -= ( eachHeight + eachStepY );
-                this.layer.x += eachStepX;
-                
-                count ++;
-            }
-            else { 
+                if ( count < total ) {
 
-                clearInterval( timerId );
+                    let eachHeight = parseInt( startHeight / count );
+                    this.layer.y -= ( eachHeight + eachStepY );
+                    this.layer.x += eachStepX;
+                    
+                    count ++;
+                }
+                else { 
 
-                timerId = setInterval( () => {
+                    clearInterval( timerId );
 
-                    count --;
+                    timerId = setInterval( () => {
 
-                    if ( count > 0 ) {
+                        count --;
 
-                        let eachHeight = parseInt( startHeight / count );
-                        this.layer.y += ( eachHeight - eachStepY );
-                        this.layer.x += eachStepX;
-                        
-                    }
-                    else {
+                        if ( count > 0 ) {
 
-                        clearInterval( timerId );
-                        this.isBounceStarted = false ;
-                    }
+                            let eachHeight = parseInt( startHeight / count );
+                            this.layer.y += ( eachHeight - eachStepY );
+                            this.layer.x += eachStepX;
+                            
+                        }
+                        else {
 
-                }, interval );
-            }
+                            clearInterval( timerId );
+                            this.isBounceStarted = false;
+                            resolve();
+                        }
 
-        }, interval )
+                    }, interval );
+                }
+
+            }, interval );
+        };
+
+        return new Promise( executorFn );
 
     }
 
-    move( direction, step = 5 ) {
-
-        if ( direction === UP ) {
-
-            this.layer.y -= step;
-        }
-        else if ( direction === RIGHT ) {
-
-            this.layer.x += step;
-        }
-        else if ( direction === DOWN ) {
-
-            this.layer.y += step;
-        }
-        else if ( direction === LEFT ) {
-
-            this.layer.x -= step;
-        }
-
-        return new Promise( ( resolve, reject ) => { 
-
-            resolve();
-        } )
-    }
 }
 
 export {

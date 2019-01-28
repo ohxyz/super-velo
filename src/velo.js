@@ -106,7 +106,18 @@ class Velo extends GameObject {
 
     jump() {
 
+        if ( this.facing === LEFT ) {
 
+            this.animationManager.runQueue( 'jump-left' );
+        }
+        else if ( this.facing === RIGHT ) {
+
+            this.animationManager.runQueue( 'jump-right' );
+        }
+
+        this.stay( 300 )
+            .then( () => { this.bounce() } );
+            // .then( () => { this.idle() } )
     }
 
     jumpStart() {

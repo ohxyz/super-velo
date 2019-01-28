@@ -8,50 +8,55 @@ class SpriteAnimation extends Animation {
         super( object );
 
         this.sliceCount = 0;
-        this.imageSlices = [];
         this.shouldRepeat = repeat;
         this.spriteImage = spriteImage;
         this.shouldFlipImage = flip;
 
-        this.getImageSlices();
+        this.imageSlices = this.sliceImages();
     }
 
-    getImageSlices() {
+    sliceImages() {
 
-        if ( this.spriteImage === null ||
-                this.spriteImage instanceof SpriteImage === false ) {
+        if ( this.spriteImage === null 
+                || this.spriteImage instanceof SpriteImage === false ) {
 
             throw new Error( '[Velo] SpriteImage not found or not valid.\n' );
         }
 
-        this.imageSlices = this.spriteImage.slice();
+        return this.spriteImage.slice();
     }
 
     animate() {
 
         this.layer.shouldFlipImage = this.shouldFlipImage;
 
-        this.timerId = setInterval( () => {
+        const executor = ( resolve, reject ) => {    
 
-            this.layer.imageSlice = this.imageSlices[ this.sliceCount ];
+            this.timerId = setInterval( () => {
 
-            if ( this.sliceCount < this.imageSlices.length - 1 ) {
+                this.layer.imageSlice = this.imageSlices[ this.sliceCount ];
 
-                this.sliceCount ++;
-            }
-            else {
+                if ( this.sliceCount < this.imageSlices.length - 1 ) {
 
-                if ( this.shouldRepeat === false ) {
-
-                    this.stop();
+                    this.sliceCount ++;
                 }
                 else {
 
-                    this.sliceCount = 0;
-                }
-            }
+                    if ( this.shouldRepeat === false ) {
 
-        }, this.animationInterval );
+                        this.stop();
+                        resolve();
+                    }
+                    else {
+
+                        this.sliceCount = 0;
+                    }
+                }
+
+            }, this.animationInterval );
+        };
+
+        return new Promise( executor );
     }
 }
 

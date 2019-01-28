@@ -27,6 +27,26 @@ class AnimationQueue {
         this.areAllStarted = true;
     }
 
+    runOneByOne( index ) {
+
+        let total = this.animations.length;
+
+        this.animations[ index ].start().then( () => {
+
+            let nextIndex = index + 1;
+
+            if ( nextIndex < total ) {
+
+                this.runOneByOne( nextIndex );
+            }
+        } );
+    }
+
+    runSequence() {
+
+        this.runOneByOne( 0 );
+    }
+
     stop() {
 
         this.animations.forEach( animation => {

@@ -23,6 +23,11 @@ class MoveAnimation extends Animation {
         }
 
         this.isStarted = false;
+
+        return new Promise( ( resolve, reject ) => { 
+
+            resolve();
+        } )
     }
 }
 

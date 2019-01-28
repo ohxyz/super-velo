@@ -9,9 +9,13 @@
 </head>
 <body>
     <div class="buttons">
-        <button onclick="am.runOne( { id: 'walk-left' } )">Walk Left Start</button>
-        <button onclick="am.runOne( { id: 'walk-right' } )">Walk Right Start</button>
+        <button onclick="am.runQueue( 'walk-left' )">Walk Left</button>
+        <button onclick="am.runQueue( 'walk-right' )">Walk Right</button>
         <button onclick="am.stopAllQueues()">Walk Stop</button>
+        <button onclick="aq3.run()">Run Queue</button>
+        <button onclick="aq3.stop()">Stop Queue</button>
+        <button onclick="aq3.runSequence()">Run in sequence</button>
+
     </div>
     <canvas id="game"></canvas>
     <script src="bundle.js"></script>

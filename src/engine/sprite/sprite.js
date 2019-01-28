@@ -15,11 +15,11 @@ class SpriteImage {
         this.startIndex = range === undefined ? 0 : range[ 0 ];
         this.endIndex = range === undefined ? this.countInRows * this.countInCols - 1 : range[ 1 ];
         this.multiple = multiple === undefined ? 1 : multiple;
-
-        this.spriteItems = [];
     }
 
     slice() {
+
+        let spriteItems = [];
 
         for ( let i = this.startIndex; i <= this.endIndex; i ++  ) {
 
@@ -37,11 +37,11 @@ class SpriteImage {
 
             for ( let j = 0; j < this.multiple; j ++ ) {
 
-                this.spriteItems.push( item );
+                spriteItems.push( item );
             }
         }
 
-        return this.spriteItems;
+        return spriteItems;
     }
 }
 

@@ -1,5 +1,3 @@
-
-
 class Animation {
 
     constructor( { layer = null, interval = 50 } = {} ) {
@@ -9,22 +7,50 @@ class Animation {
 
         this.timerId = 0;
         this.isStarted = false;
+        this.count = 0;
+        
     }
 
-    // Todo: create basic functionality for simple animation
+    // Placeholder
     animate() {
 
+        const TOTAL = 20;
+
+        const executor = ( resolve, reject ) => { 
+
+            this.timerId = setInterval( () => {
+
+                if ( this.count < TOTAL ) {
+
+                    console.log( this.count );
+                    this.count ++;
+                }
+                else {
+
+                    clearInterval( this.timerId );
+                    resolve();
+                }
+                
+            }, this.animationInterval );
+        };
+
+        return new Promise( executor );
     }
 
-    start() {
+    start( message = '' ) {
  
         if ( this.isStarted ) {
 
             return;
         }
 
+        if ( message !== '' ) {
+
+            console.log( message );
+        }
+
         this.isStarted = true;
-        this.animate();
+        return this.animate();
     }
 
     stop() {

@@ -99,43 +99,6 @@ class AnimationManager {
         return newAnimationQueue;
     }
 
-    /**
-     * Stop current animation and start a new animation.
-     * When the method called, it will do nothing if the current animation is still running.
-     *
-     */
-    runOnlyFinish( id, onFinish ) {
-
-        let newAnimationQueue = this.getQueue( id );
-
-        if ( newAnimationQueue === null ) {
-
-            throw new Error( `[Velo] Animation (ID: ${id}) not found.\n` );
-        }
-
-        if ( this.currentAnimationQueue !== null 
-                && this.currentAnimationQueue.id !== id ) {
-
-            if ( this.currentAnimationQueue.areAllStarted
-                    && newAnimationQueue.priority < this.currentAnimationQueue.priority ) {
-
-                this.currentAnimationQueue.stop();
-            }
-        }
-
-        if ( this.currentAnimationQueue.areAllStarted ) {
-
-            return this.currentAnimationQueue;
-        }
-        else {
-
-            newAnimationQueue.run();
-            this.currentAnimationQueue = newAnimationQueue;
-
-            return this.currentAnimationQueue;
-        }
-    }
-
     stopAllQueues() {
 
         this.animationQueues.forEach( queue => { 
