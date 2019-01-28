@@ -17,7 +17,7 @@ class AnimationQueue {
         } )
     }
 
-    run() {
+    runTogether() {
 
         this.animations.forEach( animation => {
 
@@ -42,7 +42,7 @@ class AnimationQueue {
         } );
     }
 
-    runSequence() {
+    run() {
 
         this.runOneByOne( 0 );
     }

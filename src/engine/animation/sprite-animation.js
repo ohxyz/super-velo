@@ -30,7 +30,7 @@ class SpriteAnimation extends Animation {
 
         this.layer.shouldFlipImage = this.shouldFlipImage;
 
-        const executor = ( resolve, reject ) => {    
+        const executor = resolve => {    
 
             this.timerId = setInterval( () => {
 
