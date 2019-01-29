@@ -47,10 +47,9 @@ class SpriteAnimation extends Animation {
                         this.stop();
                         resolve();
                     }
-                    else {
 
-                        this.sliceCount = 0;
-                    }
+                    this.sliceCount = 0;
+
                 }
 
             }, this.animationInterval );

@@ -12,7 +12,6 @@ class CharacterController {
             'd': false, 'D': false, 'ArrowRight': false,
             'w': false, 'W': false, 'ArrowUp': false,
             's': false, 'S': false, 'ArrowDown': false,
-
             'k': false, 'K': false, 'Enter': false,
             ' ': false
         }
@@ -102,30 +101,7 @@ class CharacterController {
         // If jump key pressed first, then wait a bit to see if a walk key is pressed.
         else if ( this.isJumpKeyDown() ) {
 
-            this.character.jumpPrepare( () => { 
-
-                if ( this.isWalkKeyDown( LEFT ) ) {
-
-                    this.character.jumpAfterPrepare( LEFT );
-                }
-                else if ( this.isWalkKeyDown( RIGHT ) ) {
-
-                    this.character.jumpAfterPrepare( RIGHT );
-                }
-                else if ( this.isWalkKeyDown( UP ) ) {
-
-                    this.character.jumpAfterPrepare( UP );
-                }
-                else if ( this.isWalkKeyDown( DOWN ) ) {
-
-                    this.character.jumpAfterPrepare( DOWN );
-                }
-                else {
-
-                    this.character.jumpStart();
-                }
-
-            } )
+            this.character.jump();
         }
     }
 
@@ -150,16 +126,13 @@ class CharacterController {
 
         if ( event.key in this.keysDown ) {
 
-            if ( !this.isAttackKeyDown() ) {
-
-                this.character.idle();
-            }
+            this.character.stopWalk();
 
             this.keysDown[ event.key ] = false;
 
             if ( event.key === ' ' ) {
 
-                clearTimeout( this.timerOfJumpDelay )
+                // clearTimeout( this.timerOfJumpDelay )
             }
         }
     }

@@ -4,7 +4,7 @@ class StaticSpriteAnimation extends SpriteAnimation {
 
     /** 
      * 
-     * @param {number} duration - Specify milliseconds to display the image slice.
+     * @param {number} duration - Milliseconds to display the image slice.
      */
     constructor( { sliceIndex = 0, duration = 1000, ...object } ) {
 
@@ -26,7 +26,12 @@ class StaticSpriteAnimation extends SpriteAnimation {
 
         return new Promise( resolve => { 
 
-            setTimeout( () => resolve(), this.duration );
+            this.timerId = setTimeout( () => {
+
+                this.stop();
+                resolve();
+
+            }, this.duration );
 
         } );
     }

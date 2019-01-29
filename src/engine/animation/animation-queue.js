@@ -1,12 +1,12 @@
 
 class AnimationQueue {
 
-    constructor( { id, priority = 0, animations = [] } ) {
+    constructor( { id, priority = 1, animations = [] } ) {
 
         this.id = id;
         this.priority = priority;
         this.animations = animations;
-        this.areAllStarted = false;
+        this.isStarted = false;
     }
 
     add( ...animations ) {
@@ -24,7 +24,7 @@ class AnimationQueue {
             animation.start();
         } );
 
-        this.areAllStarted = true;
+        this.isStarted = true;
     }
 
     runOneByOne( index ) {
@@ -39,12 +39,18 @@ class AnimationQueue {
 
                 this.runOneByOne( nextIndex );
             }
+            else {
+
+                this.isStarted = false;
+            }
+
         } );
     }
 
     run() {
 
         this.runOneByOne( 0 );
+        this.isStarted = true;
     }
 
     stop() {
@@ -54,7 +60,7 @@ class AnimationQueue {
             animation.stop();
         } );
 
-        this.areAllStarted = false;
+        this.isStarted = false;
     }
 }
 

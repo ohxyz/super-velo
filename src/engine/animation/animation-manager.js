@@ -10,6 +10,8 @@ import { AnimationQueue } from './animation-queue.js';
  *       { id: 'anime-1', priority: 2, animation: walkAnimation },
  *       { id: 'anime-2', priority: 0, animation: jumpAnimation }
  *   ]
+ *
+ * @Todo Remove `id` from AnimationQueue. Apply `id` in AnimationManager
  */
 class AnimationManager {
 
@@ -68,7 +70,7 @@ class AnimationManager {
      * running animations of a queue must all be stopped, unless the queue has a higher priority.
      *
      */
-    runQueue( qid, onFinish = () => {} ) {
+    runQueue( qid, allowRepeat = true ) {
 
         let newAnimationQueue = this.getQueue( qid );
 
@@ -77,26 +79,33 @@ class AnimationManager {
             throw new Error( `[Velo] Animation (ID: ${qid}) not found.\n` );
         }
 
-        if ( this.currentAnimationQueue !== null 
-                && this.currentAnimationQueue.id !== qid 
-                && this.currentAnimationQueue.areAllStarted ) {
-    
+        if ( this.currentAnimationQueue !== null ) {
+
             // When new animation queue's priority is lower(>) than the current one.
             if ( newAnimationQueue.priority > this.currentAnimationQueue.priority ) {
 
                 return;
             }
-            else {
 
-                this.currentAnimationQueue.stop();
-            }
+            this.currentAnimationQueue.stop();
         }
-
-        newAnimationQueue.run();
+        
         this.currentAnimationQueue = newAnimationQueue;
-        this.currentAnimationQueue.areAllStarted = true;
+        this.currentAnimationQueue.run();
 
         return newAnimationQueue;
+    }
+
+    stopQueue( qid ) {
+
+        let queue = this.getQueue( qid );
+
+        if ( queue === null ) {
+
+            throw new Error( `[Velo] Animation (ID: ${qid}) not found.\n` );
+        }
+
+        queue.stop();
     }
 
     stopAllQueues() {

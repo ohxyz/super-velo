@@ -1,4 +1,4 @@
-import { AnimationManager, SpriteAnimation } from './engine/animation';
+import { AnimationManager, SpriteAnimation, StaticSpriteAnimation, AnimationQueue } from './engine/animation';
 import { SpriteImage } from './engine/sprite';
 
 import walkImageSource from './assets/walk.png';
@@ -33,47 +33,121 @@ function createAnimationManager( layer ) {
         sliceHeight: spriteSliceHeight,
         matrix: [ 4, 5 ]
     } );
-
-    let jumpImage = new Image();
-    jumpImage.src = jumpImageSource;
-
-    let jumpSpriteImage = new SpriteImage( { 
-
-        image: jumpImage,
-        sliceWidth: spriteSliceWidth,
-        sliceHeight: spriteSliceHeight,
-        matrix: [ 4, 3 ],
-        range: [ 0, 5 ]
-    } );
  
     let a1 = new SpriteAnimation( { layer: layer, spriteImage: walkSpriteImage } );
     let a2 = new SpriteAnimation( { layer: layer, flip: true, spriteImage: walkSpriteImage } );
     let a3 = new SpriteAnimation( { layer: layer, spriteImage: idleSpriteImage } );
     let a4 = new SpriteAnimation( { layer: layer, flip: true, spriteImage: idleSpriteImage } );
 
-    let a5 = new SpriteAnimation( {
+
+    let jumpImage = new Image();
+    jumpImage.src = jumpImageSource;
+
+    // 50 * 7 = 350 ms
+    let jumpStartSpriteImage = new SpriteImage( { 
+
+        image: jumpImage,
+        sliceWidth: spriteSliceWidth,
+        sliceHeight: spriteSliceHeight,
+        matrix: [ 4, 3 ],
+        range: [ 0, 6 ]
+    } );
+
+    // 50 * 4 = 200 ms;
+    let jumpEndSpriteImage = new SpriteImage( { 
+
+        image: jumpImage,
+        sliceWidth: spriteSliceWidth,
+        sliceHeight: spriteSliceHeight,
+        matrix: [ 4, 3 ],
+        range: [ 8, 11 ]
+    } );
+
+    // Should be time of ( stay + bounce - 350 - 250 - delay ) = 300 + 1000 - 350 - 200 - 50 = 700
+    let jumpMiddleSpriteImage = new SpriteImage( { 
+
+        image: jumpImage,
+        sliceWidth: spriteSliceWidth,
+        sliceHeight: spriteSliceHeight,
+        matrix: [ 4, 3 ]
+    } );
+
+/* Jump animations ********************************************************************************/
+
+    let jumpLeftStartAnimation = new SpriteAnimation( {
 
         layer: layer, 
         repeat: false, 
-        spriteImage: jumpSpriteImage, 
-        
+        spriteImage: jumpStartSpriteImage,
     } );
+
+    // Refer to jumpMiddleSpriteImage comments
+    let jumpLeftMiddleAnimation = new StaticSpriteAnimation( { 
+
+        layer: layer, 
+        repeat: false, 
+        spriteImage: jumpMiddleSpriteImage,
+        sliceIndex: 7,
+        duration: 700,
+    } );
+
+    let jumpLeftEndAnimation = new SpriteAnimation( { 
+
+        layer: layer,
+        repeat: false,
+        spriteImage: jumpEndSpriteImage,
+    } )
+
+
+    let jumpRightStartAnimation = new SpriteAnimation( {
+
+        layer: layer, 
+        repeat: false,
+        flip: true,
+        spriteImage: jumpStartSpriteImage, 
+    } );
+
+    let jumpRightMiddleAnimation = new StaticSpriteAnimation( { 
+
+        layer: layer, 
+        repeat: false, 
+        spriteImage: jumpMiddleSpriteImage,
+        sliceIndex: 7,
+        duration: 750,
+        flip: true
+    } );
+
+    let jumpRightEndAnimation = new SpriteAnimation( { 
+
+        layer: layer,
+        repeat: false,
+        spriteImage: jumpEndSpriteImage,
+        flip: true,
+    } );
+
     
-    let a6 = new SpriteAnimation( {
 
-        layer: layer, 
-        repeat: false, 
-        flip: true, 
-        spriteImage: jumpSpriteImage, 
+    let jumpLeftAnimationQueue = new AnimationQueue( {
+
+        id: 'jump-left',
+        animations: [ jumpLeftStartAnimation, jumpLeftMiddleAnimation, jumpLeftEndAnimation ]
+
     } );
+
+    let jumpRightAnimationQueue = new AnimationQueue( {
+
+        id: 'jump-right',
+        animations: [ jumpRightStartAnimation, jumpRightMiddleAnimation, jumpRightEndAnimation, a4 ]
+
+    } );
+
 
     animationManager.addQueueByAnimation( { qid: 'walk-left', animation: a1 } );
     animationManager.addQueueByAnimation( { qid: 'walk-right', animation: a2 } );
     animationManager.addQueueByAnimation( { qid: 'idle-left', animation: a3 } );
     animationManager.addQueueByAnimation( { qid: 'idle-right', animation: a4 } );
-    animationManager.addQueueByAnimation( { qid: 'jump-left', animation: a5 } );
-    animationManager.addQueueByAnimation( { qid: 'jump-right', animation: a6 } );
-
+    animationManager.addQueue( jumpLeftAnimationQueue );
+    animationManager.addQueue( jumpRightAnimationQueue );
 
     return animationManager;
 }

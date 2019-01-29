@@ -89,7 +89,7 @@ class GameObject {
         let total = parseInt( ( period / 2 ) / interval, 10 );
         let count = 1;
 
-        const executorFn = ( resolve, reject ) => {
+        const executor = ( resolve, reject ) => {
 
             let timerId = setInterval( () => {
 
@@ -129,7 +129,7 @@ class GameObject {
             }, interval );
         };
 
-        return new Promise( executorFn );
+        return new Promise( executor );
 
     }
 

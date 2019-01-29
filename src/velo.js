@@ -1,4 +1,4 @@
-import { NONE, UP, RIGHT, DOWN, LEFT } from './engine/constants';
+import { NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP } from './engine/constants';
 import { SpriteImage } from './engine/sprite';
 import { AnimationManager, AnimationQueue, SpriteAnimation, MoveAnimation } from './engine/animation';
 import { GameObject } from './engine/game';
@@ -13,6 +13,7 @@ class Velo extends GameObject {
 
         this.facing = RIGHT;
         this.animationManager = new AnimationManager();
+        this.currentState = IDLE;
 
         this.init();
     }
@@ -25,6 +26,13 @@ class Velo extends GameObject {
 
     walkByFacing() {
 
+        if ( this.currentState === WALK ) {
+
+            return;
+        }
+
+        this.currentState = WALK;
+
         if ( this.facing === LEFT ) {
 
             this.animationManager.runQueue( 'walk-left' );
@@ -35,7 +43,17 @@ class Velo extends GameObject {
         }
     }
 
+    stopWalk() {
+
+        this.idle();
+    }
+
     walk( direction ) {
+
+        if ( this.currentState === JUMP ) {
+
+            return;
+        }
 
         if ( direction === LEFT ) {
 
@@ -60,6 +78,7 @@ class Velo extends GameObject {
         }
 
         this.walkByFacing();
+
     }
 
     walkLeft() {
@@ -94,6 +113,11 @@ class Velo extends GameObject {
 
     idle() {
 
+        if ( this.currentState === JUMP ) {
+
+            return;
+        }
+
         if ( this.facing === LEFT ) {
 
             this.animationManager.runQueue( 'idle-left' );
@@ -102,9 +126,18 @@ class Velo extends GameObject {
 
             this.animationManager.runQueue( 'idle-right' );
         }
+
+        this.currentState = IDLE;
     }
 
     jump() {
+
+        if ( this.currentState === JUMP ) {
+
+            return;
+        }
+
+        this.currentState = JUMP;
 
         if ( this.facing === LEFT ) {
 
@@ -116,18 +149,8 @@ class Velo extends GameObject {
         }
 
         this.stay( 300 )
-            .then( () => { this.bounce() } );
-            // .then( () => { this.idle() } )
-    }
-
-    jumpStart() {
-
-        
-    }
-
-    jumpPrepare() {
-
-        this.bounce();
+            .then( () => this.bounce() )
+            .then( () => { this.currentState = NONE } );
     }
 
     stop() {
