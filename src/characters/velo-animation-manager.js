@@ -1,10 +1,10 @@
-import { AnimationManager, SpriteAnimation, StaticSpriteAnimation, AnimationQueue } from './engine/animation';
-import { SpriteImage } from './engine/sprite';
+import { AnimationManager, SpriteAnimation, StaticSpriteAnimation, AnimationQueue } from '../engine/animation';
+import { SpriteImage } from '../engine/sprite';
 
-import walkImageSource from './assets/walk.png';
-import idleImageSource from './assets/idle.png';
-import attackImageSource from './assets/attack.png';
-import jumpImageSource from './assets/jump.png';
+import walkImageSource from '../assets/walk.png';
+import idleImageSource from '../assets/idle.png';
+import attackImageSource from '../assets/attack.png';
+import jumpImageSource from '../assets/jump.png';
 
 function createAnimationManager( layer ) {
 
@@ -36,9 +36,8 @@ function createAnimationManager( layer ) {
  
     let a1 = new SpriteAnimation( { layer: layer, spriteImage: walkSpriteImage } );
     let a2 = new SpriteAnimation( { layer: layer, flip: true, spriteImage: walkSpriteImage } );
-    let a3 = new SpriteAnimation( { layer: layer, spriteImage: idleSpriteImage } );
-    let a4 = new SpriteAnimation( { layer: layer, flip: true, spriteImage: idleSpriteImage } );
-
+    let idleLeftAnimation = new SpriteAnimation( { layer: layer, spriteImage: idleSpriteImage } );
+    let idleRightAnimation = new SpriteAnimation( { layer: layer, flip: true, spriteImage: idleSpriteImage } );
 
     let jumpImage = new Image();
     jumpImage.src = jumpImageSource;
@@ -74,6 +73,8 @@ function createAnimationManager( layer ) {
 
 /* Jump animations ********************************************************************************/
 
+    let jumpMiddleDuration = 500;
+
     let jumpLeftStartAnimation = new SpriteAnimation( {
 
         layer: layer, 
@@ -88,7 +89,7 @@ function createAnimationManager( layer ) {
         repeat: false, 
         spriteImage: jumpMiddleSpriteImage,
         sliceIndex: 7,
-        duration: 700,
+        duration: jumpMiddleDuration,
     } );
 
     let jumpLeftEndAnimation = new SpriteAnimation( { 
@@ -113,7 +114,7 @@ function createAnimationManager( layer ) {
         repeat: false, 
         spriteImage: jumpMiddleSpriteImage,
         sliceIndex: 7,
-        duration: 750,
+        duration: jumpMiddleDuration,
         flip: true
     } );
 
@@ -125,27 +126,36 @@ function createAnimationManager( layer ) {
         flip: true,
     } );
 
-    
 
     let jumpLeftAnimationQueue = new AnimationQueue( {
 
         id: 'jump-left',
-        animations: [ jumpLeftStartAnimation, jumpLeftMiddleAnimation, jumpLeftEndAnimation ]
+        animations: [ 
+
+            jumpLeftStartAnimation, 
+            jumpLeftMiddleAnimation, 
+            jumpLeftEndAnimation, 
+            idleLeftAnimation 
+        ]
 
     } );
 
     let jumpRightAnimationQueue = new AnimationQueue( {
 
         id: 'jump-right',
-        animations: [ jumpRightStartAnimation, jumpRightMiddleAnimation, jumpRightEndAnimation, a4 ]
+        animations: [
 
+            jumpRightStartAnimation, 
+            jumpRightMiddleAnimation, 
+            jumpRightEndAnimation, 
+            idleRightAnimation 
+        ]
     } );
-
 
     animationManager.addQueueByAnimation( { qid: 'walk-left', animation: a1 } );
     animationManager.addQueueByAnimation( { qid: 'walk-right', animation: a2 } );
-    animationManager.addQueueByAnimation( { qid: 'idle-left', animation: a3 } );
-    animationManager.addQueueByAnimation( { qid: 'idle-right', animation: a4 } );
+    animationManager.addQueueByAnimation( { qid: 'idle-left', animation: idleLeftAnimation } );
+    animationManager.addQueueByAnimation( { qid: 'idle-right', animation: idleRightAnimation } );
     animationManager.addQueue( jumpLeftAnimationQueue );
     animationManager.addQueue( jumpRightAnimationQueue );
 

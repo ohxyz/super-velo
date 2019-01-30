@@ -2,9 +2,10 @@ import { UP, RIGHT, DOWN, LEFT } from './engine/constants';
 import { SpriteImage } from './engine/sprite';
 import { AnimationManager } from './engine/animation';
 import { BackgroundLayer, LayerManager, ImageLayer } from './engine/layer';
-import { Game, CharacterController } from './engine/game';
+import { Game } from './engine/game';
 
-import { velo } from './velo';
+import { velo } from './characters/velo.js';
+import { CharacterController } from './characters/character-controller.js';
 import { backgroundImage } from './background.js';
 
 let game = new Game( {

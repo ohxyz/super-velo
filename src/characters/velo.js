@@ -1,9 +1,9 @@
-import { NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP } from './engine/constants';
-import { SpriteImage } from './engine/sprite';
-import { AnimationManager, AnimationQueue, SpriteAnimation, MoveAnimation } from './engine/animation';
-import { GameObject } from './engine/game';
+import { NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP } from '../engine/constants';
+import { SpriteImage } from '../engine/sprite';
+import { AnimationManager, AnimationQueue, SpriteAnimation, MoveAnimation } from '../engine/animation';
+import { GameObject } from '../engine/game';
 import { createAnimationManager } from './velo-animation-manager.js';
-import { ImageLayer } from './engine/layer';
+import { ImageLayer } from '../engine/layer';
 
 class Velo extends GameObject {
 
@@ -93,22 +93,24 @@ class Velo extends GameObject {
 
     jumpLeft() {
 
-        return this.bounce( LEFT );
+        this.facing = LEFT;
+        this.jump( LEFT );
     }
 
     jumpRight() {
 
-        return this.bounce( RIGHT );
+        this.facing = RIGHT;
+        this.jump( RIGHT );
     }
 
     jumpUp() {
 
-        return this.bounce( UP );
+        this.jump( UP );
     }
 
     jumpDown() {
 
-        return this.bounce( DOWN );
+        this.jump( DOWN );
     }
 
     idle() {
@@ -130,7 +132,7 @@ class Velo extends GameObject {
         this.currentState = IDLE;
     }
 
-    jump() {
+    jump( direction = NONE ) {
 
         if ( this.currentState === JUMP ) {
 
@@ -149,7 +151,7 @@ class Velo extends GameObject {
         }
 
         this.stay( 300 )
-            .then( () => this.bounce() )
+            .then( () => this.bounce( direction, { time: 700 } ) )
             .then( () => { this.currentState = NONE } );
     }
 

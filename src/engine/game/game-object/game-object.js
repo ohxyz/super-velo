@@ -14,11 +14,11 @@ class GameObject {
         this.layer.y = y;
     }
 
-    stay( period = 1000 ) {
+    stay( time = 1000 ) {
 
         return new Promise( ( resolve, reject ) => { 
 
-            setTimeout( () => { resolve() }, period );
+            setTimeout( () => { resolve() }, time );
 
         } );
 
@@ -52,7 +52,7 @@ class GameObject {
     bounce( direction = NONE, { startHeight = 50,
                                 stepSizeX = 5,
                                 stepSizeY = 5,
-                                period = 1000, 
+                                time = 500, 
                                 interval = 20 } = {} ) {
 
         if ( this.isBounceStarted ) {
@@ -86,7 +86,7 @@ class GameObject {
             eachStepY = -stepSizeY;
         }
 
-        let total = parseInt( ( period / 2 ) / interval, 10 );
+        let total = parseInt( ( time / 2 ) / interval, 10 );
         let count = 1;
 
         const executor = ( resolve, reject ) => {

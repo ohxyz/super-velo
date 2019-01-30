@@ -1,4 +1,4 @@
-import { UP, RIGHT, DOWN, LEFT } from '../../constants.js';
+import { UP, RIGHT, DOWN, LEFT } from '../engine/constants.js';
 
 class CharacterController {
 
@@ -84,30 +84,23 @@ class CharacterController {
 
         if ( this.isWalkKeyDown( UP ) ) {
 
-            this.isJumpKeyDown() ? this.character.jump( UP ) : this.character.walk( UP );
+            this.isJumpKeyDown() ? this.character.jumpUp() : this.character.walk( UP );
         }
         else if ( this.isWalkKeyDown( LEFT ) ) {
 
-            this.isJumpKeyDown() ? this.character.jump( LEFT ) : this.character.walk( LEFT );
+            this.isJumpKeyDown() ? this.character.jumpLeft() : this.character.walk( LEFT );
         }
         else if ( this.isWalkKeyDown( DOWN ) ) {
 
-            this.isJumpKeyDown() ? this.character.jump( DOWN ) : this.character.walk( DOWN );
+            this.isJumpKeyDown() ? this.character.jumpDown() : this.character.walk( DOWN );
         }
         else if ( this.isWalkKeyDown( RIGHT ) ) {
 
-            this.isJumpKeyDown() ? this.character.jump( RIGHT ) : this.character.walk( RIGHT );
-        }
-        // If jump key pressed first, then wait a bit to see if a walk key is pressed.
-        else if ( this.isJumpKeyDown() ) {
-
-            this.character.jump();
+            this.isJumpKeyDown() ? this.character.jumpRight() : this.character.walk( RIGHT );
         }
     }
 
     handleKeyDown( event ) {
-
-        this.resetKeysDown();
 
         if ( event.key in this.keysDown ) {
 
@@ -127,13 +120,7 @@ class CharacterController {
         if ( event.key in this.keysDown ) {
 
             this.character.stopWalk();
-
             this.keysDown[ event.key ] = false;
-
-            if ( event.key === ' ' ) {
-
-                // clearTimeout( this.timerOfJumpDelay )
-            }
         }
     }
 }

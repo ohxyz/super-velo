@@ -6,11 +6,12 @@ const RIGHT = 2;
 const DOWN = 3;
 const LEFT = 4;
 
-const IDLE = 10;
-const WALK = 11;
-const JUMP = 12;
-const ATTACK = 13;
-const JUMP_ATTACK = 14;
+const MOVE = 'move';
+const IDLE = 'idle';
+const WALK = 'walk';
+const JUMP = 'jump';
+const ATTACK = 'attack';
+const JUMP_ATTACK = 'jump-attack';
 
 export {
 
@@ -22,6 +23,7 @@ export {
     DOWN, 
     LEFT,
 
+    MOVE,
     IDLE,
     WALK,
     JUMP,
