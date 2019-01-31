@@ -18,7 +18,7 @@ class GameObject {
 
         return new Promise( ( resolve, reject ) => { 
 
-            setTimeout( () => { resolve() }, time );
+            setTimeout( () => resolve(), time );
 
         } );
 

@@ -16,6 +16,27 @@ module.exports = env => {
     console.log( '[Entry]   ', entryPath );
     console.log( '[Output]  ', outputPath );
 
+    let rules = [ {
+
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+
+    }, {
+
+        test: /\.(png|jpg|gif)$/,
+        exclude: /node_modules/,
+        use: [ 
+
+            {    
+                loader: 'file-loader',
+                options: {
+                    outputPath: 'images'
+                }
+            }
+        ]
+    } ];
+
     return {
 
         mode: 'development',
@@ -31,26 +52,7 @@ module.exports = env => {
             port: 5000,
         },
         module: {
-            rules: [ 
-                {
-                    test: /\.js$/,
-                    exclude: /node_modules/,
-                    loader: 'babel-loader',
-                },
-                {
-                    test: /\.(png|jpg|gif)$/,
-                    exclude: /node_modules/,
-                    use: [ 
-                        {
-
-                            loader: 'file-loader',
-                            options: {
-                                outputPath: 'images'
-                            }
-                        }
-                    ]
-                }
-            ]
+            rules: rules
         }
     }
 };
