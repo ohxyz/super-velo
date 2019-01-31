@@ -1,4 +1,4 @@
-import { UP, RIGHT, DOWN, LEFT } from '../engine/constants.js';
+import { UP, RIGHT, DOWN, LEFT, WALK, JUMP, ATTACK, IDLE } from '../engine/constants.js';
 
 class CharacterController {
 
@@ -15,8 +15,6 @@ class CharacterController {
             'k': false, 'K': false, 'Enter': false,
             ' ': false
         }
-
-        this.timerOfJumpDelay = 0;
     }
 
     init() {
@@ -98,6 +96,10 @@ class CharacterController {
 
             this.isJumpKeyDown() ? this.character.jumpRight() : this.character.walk( RIGHT );
         }
+        else if ( this.isJumpKeyDown() ) {
+
+            this.character.jump();
+        }
     }
 
     handleKeyDown( event ) {
@@ -119,7 +121,11 @@ class CharacterController {
 
         if ( event.key in this.keysDown ) {
 
-            this.character.stopWalk();
+            if ( this.character.currentState === WALK ) {
+
+                this.character.stopWalk();
+            }
+            
             this.keysDown[ event.key ] = false;
         }
     }

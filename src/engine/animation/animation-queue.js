@@ -31,26 +31,34 @@ class AnimationQueue {
 
         let total = this.animations.length;
 
-        this.animations[ index ].start().then( () => {
+        const executor = resolve => {
 
-            let nextIndex = index + 1;
+            this.animations[ index ].start().then( () => {
 
-            if ( nextIndex < total ) {
+                let nextIndex = index + 1;
 
-                this.runOneByOne( nextIndex );
-            }
-            else {
+                if ( nextIndex < total ) {
 
-                this.isStarted = false;
-            }
+                    this.runOneByOne( nextIndex );
+                }
+                else {
 
-        } );
+                    this.isStarted = false;
+                    resolve();
+                }
+
+            } );
+        }
+
+        return new Promise( executor );
     }
 
     run() {
 
-        this.runOneByOne( 0 );
         this.isStarted = true;
+
+        return this.runOneByOne( 0 );
+        
     }
 
     stop() {

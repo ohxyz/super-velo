@@ -1,4 +1,4 @@
-import backgroundImageSource from './assets/background-dev.png';
+import backgroundImageSource from '../assets/background-dev.png';
 
 let backgroundImage = new Image();
 backgroundImage.src = backgroundImageSource;

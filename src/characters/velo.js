@@ -1,4 +1,4 @@
-import { NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP } from '../engine/constants';
+import { NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP, ATTACK } from '../engine/constants';
 import { SpriteImage } from '../engine/sprite';
 import { AnimationManager, AnimationQueue, SpriteAnimation, MoveAnimation } from '../engine/animation';
 import { GameObject } from '../engine/game';
@@ -50,7 +50,7 @@ class Velo extends GameObject {
 
     walk( direction ) {
 
-        if ( this.currentState === JUMP ) {
+        if ( this.currentState === JUMP || this.currentState === ATTACK ) {
 
             return;
         }
@@ -78,7 +78,6 @@ class Velo extends GameObject {
         }
 
         this.walkByFacing();
-
     }
 
     walkLeft() {
@@ -89,6 +88,32 @@ class Velo extends GameObject {
     walkRight() {
 
         return this.walk( RIGHT );
+    }
+
+    attack( direction ) {
+
+        if ( this.currentState === ATTACK ) {
+
+            return;
+        }
+
+        this.currentState = ATTACK;
+
+        if ( this.facing === LEFT ) {
+
+            this.animationManager.runQueue( 'attack-left' ).then( () => { 
+
+                this.idle();
+            } );
+        }
+        else if ( this.facing === RIGHT ) {
+
+            this.animationManager.runQueue( 'attack-right' ).then( () => { 
+
+                this.idle();
+            } );
+        }
+
     }
 
     jumpLeft() {

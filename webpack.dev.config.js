@@ -16,7 +16,7 @@ module.exports = env => {
     console.log( '[Entry]   ', entryPath );
     console.log( '[Output]  ', outputPath );
 
-    let rules = [ {
+    let moduleRules = [ {
 
         test: /\.js$/,
         exclude: /node_modules/,
@@ -27,7 +27,6 @@ module.exports = env => {
         test: /\.(png|jpg|gif)$/,
         exclude: /node_modules/,
         use: [ 
-
             {    
                 loader: 'file-loader',
                 options: {
@@ -52,7 +51,7 @@ module.exports = env => {
             port: 5000,
         },
         module: {
-            rules: rules
+            rules: moduleRules
         }
     }
 };

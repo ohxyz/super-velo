@@ -70,7 +70,7 @@ class AnimationManager {
      * running animations of a queue must all be stopped, unless the queue has a higher priority.
      *
      */
-    runQueue( qid, allowRepeat = true ) {
+    runQueue( qid ) {
 
         let newAnimationQueue = this.getQueue( qid );
 
@@ -91,9 +91,9 @@ class AnimationManager {
         }
         
         this.currentAnimationQueue = newAnimationQueue;
-        this.currentAnimationQueue.run();
+        return this.currentAnimationQueue.run();
 
-        return newAnimationQueue;
+       
     }
 
     stopQueue( qid ) {

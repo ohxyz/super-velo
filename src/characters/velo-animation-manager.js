@@ -12,6 +12,8 @@ function createAnimationManager( layer ) {
     let spriteSliceWidth = 196;
     let spriteSliceHeight = 197.5;
 
+/* Walk images and animations *********************************************************************/
+
     let walkImage = new Image();
     walkImage.src = walkImageSource;
 
@@ -22,6 +24,11 @@ function createAnimationManager( layer ) {
         sliceHeight: spriteSliceHeight,
         matrix: [ 4, 4 ]
     } );
+
+    let walkLeftAnimation = new SpriteAnimation( { layer: layer, spriteImage: walkSpriteImage } );
+    let walkRightAnimation = new SpriteAnimation( { layer: layer, flip: true, spriteImage: walkSpriteImage } );
+
+/* Idle images and animations *********************************************************************/
 
     let idleImage = new Image();
     idleImage.src = idleImageSource;
@@ -34,10 +41,12 @@ function createAnimationManager( layer ) {
         matrix: [ 4, 5 ]
     } );
  
-    let a1 = new SpriteAnimation( { layer: layer, spriteImage: walkSpriteImage } );
-    let a2 = new SpriteAnimation( { layer: layer, flip: true, spriteImage: walkSpriteImage } );
+
     let idleLeftAnimation = new SpriteAnimation( { layer: layer, spriteImage: idleSpriteImage } );
     let idleRightAnimation = new SpriteAnimation( { layer: layer, flip: true, spriteImage: idleSpriteImage } );
+
+
+/* Jump images ************************************************************************************/
 
     let jumpImage = new Image();
     jumpImage.src = jumpImageSource;
@@ -99,7 +108,6 @@ function createAnimationManager( layer ) {
         spriteImage: jumpEndSpriteImage,
     } )
 
-
     let jumpRightStartAnimation = new SpriteAnimation( {
 
         layer: layer, 
@@ -152,12 +160,65 @@ function createAnimationManager( layer ) {
         ]
     } );
 
-    animationManager.addQueueByAnimation( { qid: 'walk-left', animation: a1 } );
-    animationManager.addQueueByAnimation( { qid: 'walk-right', animation: a2 } );
+/* Attack images and animations *******************************************************************/
+    
+    let attackImage = new Image();
+    attackImage.src = attackImageSource;
+
+    let attackSpriteImage = new SpriteImage( { 
+
+        image: attackImage,
+        sliceWidth: spriteSliceWidth,
+        sliceHeight: spriteSliceHeight,
+        matrix: [ 4, 2 ]
+    } );
+
+    let attackLeftAnimation = new SpriteAnimation( { 
+        
+        layer: layer, 
+        spriteImage: attackSpriteImage, 
+        repeat: false 
+    } );
+    
+    let attackRightAnimation = new SpriteAnimation( { 
+
+        layer: layer, 
+        flip: true, 
+        spriteImage: attackSpriteImage, 
+        repeat: false 
+    } );
+
+    let attackLeftAnimationQueue = new AnimationQueue( {
+
+        id: 'attack-left',
+        animations: [ 
+        
+            attackLeftAnimation,
+            // idleLeftAnimation 
+        ]
+    } );
+
+    let attackRightAnimationQueue = new AnimationQueue( {
+
+        id: 'attack-right',
+        animations: [
+
+            attackRightAnimation,
+            // idleRightAnimation 
+        ]
+    } );
+
+
+/* Add animations *********************************************************************************/
+
+    animationManager.addQueueByAnimation( { qid: 'walk-left', animation: walkLeftAnimation } );
+    animationManager.addQueueByAnimation( { qid: 'walk-right', animation: walkRightAnimation } );
     animationManager.addQueueByAnimation( { qid: 'idle-left', animation: idleLeftAnimation } );
     animationManager.addQueueByAnimation( { qid: 'idle-right', animation: idleRightAnimation } );
     animationManager.addQueue( jumpLeftAnimationQueue );
     animationManager.addQueue( jumpRightAnimationQueue );
+    animationManager.addQueue( attackLeftAnimationQueue );
+    animationManager.addQueue( attackRightAnimationQueue );
 
     return animationManager;
 }

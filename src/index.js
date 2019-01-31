@@ -6,7 +6,7 @@ import { Game } from './engine/game';
 
 import { velo } from './characters/velo.js';
 import { CharacterController } from './characters/character-controller.js';
-import { backgroundImage } from './background.js';
+import { backgroundImage } from './objects/background.js';
 
 let game = new Game( {
 
