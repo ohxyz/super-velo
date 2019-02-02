@@ -177,7 +177,8 @@ function createAnimationManager( layer ) {
         
         layer: layer, 
         spriteImage: attackSpriteImage, 
-        repeat: false 
+        repeat: false,
+        interval: 50,
     } );
     
     let attackRightAnimation = new SpriteAnimation( { 
@@ -185,7 +186,8 @@ function createAnimationManager( layer ) {
         layer: layer, 
         flip: true, 
         spriteImage: attackSpriteImage, 
-        repeat: false 
+        repeat: false,
+        interval: 50,
     } );
 
     let attackLeftAnimationQueue = new AnimationQueue( {

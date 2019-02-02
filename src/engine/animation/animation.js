@@ -22,7 +22,6 @@ class Animation {
 
                 if ( this.count < TOTAL ) {
 
-                    console.log( this.count );
                     this.count ++;
                 }
                 else {
@@ -37,17 +36,11 @@ class Animation {
         return new Promise( executor );
     }
 
-    // Todo: Remove `message` parameter
-    start( message = '' ) {
+    start() {
  
         if ( this.isStarted ) {
 
             return;
-        }
-
-        if ( message !== '' ) {
-
-            console.log( message );
         }
 
         this.isStarted = true;

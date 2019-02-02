@@ -195,9 +195,9 @@ let veloLayer = new ImageLayer( {
     zIndex: 2,
     width: 196,
     height: 197.5,
-} )
+} );
 
-let velo = new Velo( veloLayer );
+let velo = new Velo( { id: 'velo', layer: veloLayer } );
 
 export {
     

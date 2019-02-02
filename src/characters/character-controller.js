@@ -21,6 +21,8 @@ class CharacterController {
 
         document.body.addEventListener( 'keydown', this.handleKeyDown.bind( this ) );
         document.body.addEventListener( 'keyup', this.handleKeyUp.bind( this ) );
+        document.body.addEventListener( 'mousedown', this.handleMouseDown.bind( this ) );
+
     }
 
     resetKeysDown() {
@@ -128,6 +130,14 @@ class CharacterController {
             
             this.keysDown[ event.key ] = false;
         }
+    }
+
+    handleMouseDown( event ) {
+
+        // Continuous clicks cause text gets selected.
+        event.preventDefault();
+
+        this.character.attack();
     }
 }
 

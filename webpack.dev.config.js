@@ -20,20 +20,22 @@ module.exports = env => {
 
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        use: {
+            loader: 'babel-loader',
+            options: { presets: [ '@babel/preset-env' ] }
+        }
 
     }, {
 
         test: /\.(png|jpg|gif)$/,
         exclude: /node_modules/,
-        use: [ 
-            {    
-                loader: 'file-loader',
-                options: {
-                    outputPath: 'images'
-                }
+        use: [ {    
+                
+            loader: 'file-loader',
+            options: {
+                outputPath: 'images'
             }
-        ]
+        } ]
     } ];
 
     return {

@@ -8,7 +8,7 @@ class LayerManager {
         this.context = context;
         this.refreshRate = refreshRate;
         this.layers = [];
-        this.timer = 0;
+        this.refreshTimerId = 0;
     }
 
     /**
@@ -66,7 +66,7 @@ class LayerManager {
 
         let count = 0;
 
-        this.timer = setInterval( () => { 
+        this.refreshTimerId = setInterval( () => { 
 
             count ++;
             
@@ -78,7 +78,7 @@ class LayerManager {
 
     stop() {
 
-        clearInterval( this.timer );
+        clearInterval( this.refreshTimerId );
     }
 }
 

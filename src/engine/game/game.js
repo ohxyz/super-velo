@@ -1,4 +1,5 @@
 import { BackgroundLayer, LayerManager, ImageLayer } from '../layer';
+import { GameObjectManager } from './game-object';
 
 class Game {
 
@@ -13,6 +14,7 @@ class Game {
         this.element.height = this.height;
         this.context = this.element.getContext( '2d' );
         this.layerManager = new LayerManager( this.context );
+        this.gameObjectManager = new GameObjectManager();
     }
 
     init() {
@@ -35,6 +37,7 @@ class Game {
     addObject( gameObject ) {
 
         this.layerManager.add( gameObject.layer );
+        this.gameObjectManager.add( gameObject );
     }
 }
 

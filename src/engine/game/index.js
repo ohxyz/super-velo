@@ -1,8 +1,9 @@
 import { Game } from './game.js';
-import { GameObject } from './game-object';
+import { GameObject, GameObjectManager } from './game-object';
 
 export {
 
     Game,
-    GameObject
+    GameObject,
+    GameObjectManager
 };

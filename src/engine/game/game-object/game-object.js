@@ -1,9 +1,11 @@
 import { NONE, UP, RIGHT, DOWN, LEFT } from '../../constants.js';
+import { generateRandomString } from '../../util/util.js';
 
 class GameObject {
 
-    constructor( layer ) {
+    constructor( { id = generateRandomString(), layer } ) {
 
+        this.id = id;
         this.layer = layer;
         this.isBounceStarted = false;
     }
