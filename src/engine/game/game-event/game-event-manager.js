@@ -1,18 +1,10 @@
-class GameEventManager {
+import { ObjectManager } from '../../object-manager';
+
+class GameEventManager extends ObjectManager {
 
     constructor() {
 
-        this.gameEvents = [];
-    }
-
-    add( gameEvent ) {
-
-        this.gameEvents.push( gameEvent );
-    }
-
-    getEvents() {
-
-        return this.gameEvents;
+        super( arguments );
     }
 
 }

@@ -1,7 +1,7 @@
 /**
  * Layer module
  */
-import { generateHexColor } from '../util/util.js';
+import Util from '../util/util.js';
 
 class Layer {
     
@@ -14,7 +14,7 @@ class Layer {
         this.width = width;
         this.height = height;
 
-        this._hexColor = generateHexColor();
+        this._hexColor = Util.generateRandomColor();
     }
 
     draw( context ) {
@@ -22,7 +22,6 @@ class Layer {
         context.fillStyle = this._hexColor;
         context.fillRect( this.x, this.y, this.width, this.height );
     }
-
 }
 
 

@@ -11,27 +11,34 @@ class ObjectManager {
 
     constructor() {
 
-        this.objectContainers = [];
+        this.containers = [];
     }
 
-    add( object, { id, prop } = { } ) {
+    add( object, { id, prop } = {} ) {
 
         let objectContainer = new ObjectContainer( { id, prop, object } );
-        this.objectContainers.push( objectContainer );
+        this.containers.push( objectContainer );
     }
 
     get( id ) {
 
-        for ( let i = 0; i < this.objectContainers.length; i ++ ) {
+        for ( let i = 0; i < this.containers.length; i ++ ) {
 
-            if ( id === this.objectContainers[ i ].id ) {
+            if ( id === this.containers[ i ].id ) {
 
-                return this.objectContainers[ i ].object;
+                return this.containers[ i ].object;
             }
         }
 
         return null;
     }
+
+    // Todo: create a new object and add it to the containers
+    create( Class, ...args ) {
+
+        return new Class( ...args );
+    }
+
 }
 
 class ObjectContainer {
@@ -57,6 +64,7 @@ class ObjectContainer {
         }
 
         this.object = object;
+        this.className = this.object.constructor.name;
     }
 }
 

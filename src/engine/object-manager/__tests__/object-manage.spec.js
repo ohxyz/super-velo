@@ -1,4 +1,4 @@
-const manager = require( '../object-manager.js' );
+const manager = require( '../index.js' );
 
 test( 'ObjectContainer constructor', () => {
 
@@ -16,10 +16,9 @@ test( 'ObjectContainer constructor', () => {
     expect( oc2[ 'my-prop' ] ).toBe( o );
     expect( oc2.object ).toBe( o );
 
-
 } );
 
-test( 'ObjectManager add and get method', () => { 
+test( 'ObjectManager add method and get method', () => { 
 
     let om = new manager.ObjectManager();
 
@@ -27,22 +26,40 @@ test( 'ObjectManager add and get method', () => {
 
     om.add( o );
 
-    expect( om.objectContainers[ 0 ].id ).toBe( 'o' );
+    expect( om.containers[ 0 ].id ).toBe( 'o' );
 
     let o2 = { x: 'y' };
 
     om.add( o2, { id: 'o2', prop: 'o2' } );
 
-    expect( om.objectContainers[ 1 ].id ).toBe( 'o2' );
-    expect( om.objectContainers[ 1 ].object.x ).toBe( 'y' );
-    expect( om.objectContainers[ 1 ].o2.x ).toBe( 'y' );
+    expect( om.containers[ 1 ].id ).toBe( 'o2' );
+    expect( om.containers[ 1 ].object.x ).toBe( 'y' );
+    expect( om.containers[ 1 ].o2.x ).toBe( 'y' );
 
     let result = om.get( 'o2' );
 
     expect( result ).toBe( o2 );
 
-    let result2 = om.get( 'xxx' );
+    let result2 = om.get( 'bar' );
 
     expect( result2 ).toBe( null );
+
+} )
+
+test( 'ObjectManager create method', () => { 
+
+    let Foo = class {
+
+        constructor( bar = 1 ) {
+
+            this.bar = bar;
+        }
+    }
+
+    let om = new manager.ObjectManager( Foo );
+    let o = om.create( Foo, 2 );
+
+    expect( o ).toBeInstanceOf( Foo );
+    expect( o.bar ).toBe( 2 );
 
 } )

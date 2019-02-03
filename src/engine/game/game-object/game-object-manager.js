@@ -1,19 +1,7 @@
-class GameObjectManager {
+import { ObjectManager } from '../../object-manager';
 
-    constructor() {
+class GameObjectManager extends ObjectManager {
 
-        this.gameObjects = [];
-    }
-
-    add( gameObject ) {
-
-        this.gameObjects.push( gameObject );
-    }
-
-    getObjects() {
-
-        return this.gameObjects;
-    }
 
 }
 
