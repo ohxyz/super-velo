@@ -10,11 +10,23 @@
 </head>
 <body>
     <div class="instruction">
+        <span style="color: red">DEBUG</span>
         <span>[W] [A] [S] [D] or Arrow Keys - Walk</span>
         <span>&nbsp;&nbsp;</span>
         <span>[Space] - Jump</span>
         <span>&nbsp;&nbsp;</span>
         <span>[K] or [Enter] - Attack</span>
+    </div>
+    <div class="buttons">
+        <button onclick="velo.walkLeft()">Walk Left</button>
+        <button onclick="velo.walkRight()">Walk Right</button>
+        <button onclick="velo.jumpLeft()">Jump Left</button>
+        <button onclick="velo.jumpRight()">Jump Right</button>
+        <button onclick="velo.jumpUp()">Jump Up</button>
+        <button onclick="velo.jumpDown()">Jump Down</button>
+        <button onclick="velo.jump()">Just Jump</button>
+        <button onclick="velo.stop()">Stop</button>
+        <button onclick="velo.attack()">Attack</button>
     </div>
     <canvas id="game"></canvas>
     <script src="./bundle.js"></script>

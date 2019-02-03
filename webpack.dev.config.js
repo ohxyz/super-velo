@@ -3,7 +3,7 @@ const path = require( 'path' );
 module.exports = env => {
 
     let entryPath = path.join( __dirname, 'src/index.js');
-    let outputPath = path.join( __dirname, 'dist' );
+    let outputPath = path.join( __dirname, 'src/__debug__' );
 
     if ( env !== undefined && env.module !== undefined ) {
 
@@ -20,8 +20,11 @@ module.exports = env => {
 
         test: /\.js$/,
         exclude: /node_modules/,
-        use: 'babel-loader'
-        
+        use: {
+            loader: 'babel-loader',
+            options: { presets: [ '@babel/preset-env' ] }
+        }
+
     }, {
 
         test: /\.(png|jpg|gif)$/,
