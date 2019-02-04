@@ -1,4 +1,4 @@
-import { ObjectManager } from '../../object-manager';
+let ObjectManager = require( '../../object-manager' ).ObjectManager;
 
 class GameEventManager extends ObjectManager {
 
@@ -7,9 +7,18 @@ class GameEventManager extends ObjectManager {
         super( arguments );
     }
 
+    run( objects ) {
+
+        for ( let i = 0 ; i < this.containers.length; i ++ ) {
+
+            let gameEvent = this.containers[ i ].object;
+            gameEvent.happen( objects );
+        }
+    }
+
 }
 
-export {
+module.exports = {
 
     GameEventManager
-};
+}

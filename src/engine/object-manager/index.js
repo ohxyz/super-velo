@@ -33,6 +33,12 @@ class ObjectManager {
         return null;
     }
 
+    getObjects() {
+
+        return this.containers.map( container => container.object );
+
+    }
+
     // Todo: create a new object and add it to the containers
     create( Class, ...args ) {
 

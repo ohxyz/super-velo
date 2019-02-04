@@ -63,3 +63,20 @@ test( 'ObjectManager create method', () => {
     expect( o.bar ).toBe( 2 );
 
 } )
+
+test( 'ObjectManager getObjects method', () => { 
+
+    let o1 = { foo: 'bar' };
+    let o2 = { a: 1 };
+
+    let om = new manager.ObjectManager();
+
+    om.add( o1 );
+    om.add( o2 );
+
+    let result = om.getObjects();
+
+    expect( result.length ).toBe( 2 );
+    expect( result[ 1 ].a ).toBe( 1 );
+
+} )

@@ -1,17 +1,20 @@
-import { generateRandomString } from '../../util/util.js';
+const util = require( '../../util/util.js' );
 
 class GameEvent {
 
-    constructor( { id = generateRandomString } ) {
+    constructor( { id = util.generateRandomString() } = {} ) {
 
         this.id = id;
     }
 
     // Placehoder for debug
-    happen( gameObjects ) {
+    happen( objects ) {
 
-        gameObjects.forEach( o => console.log( o.id ) );
+        objects.forEach( o => console.log( o.id ) );
     }
 }
 
-export { GameEvent }
+module.exports = {
+
+    GameEvent 
+};
