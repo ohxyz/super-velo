@@ -1,5 +1,5 @@
 import { Game } from './game.js';
-import { GameObject, GameObjectManager } from './game-object';
+import { GameObject, GameObjectManager } from './object';
 
 export {
 

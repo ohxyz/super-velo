@@ -6,14 +6,15 @@
   "scripts": {
     "test": "jest",
     "serve": "http-server ./dist -c-1 -p 8080",
-    "build": "webpack --config webpack.dev.config.js",
-    "dev": "webpack-dev-server --open --config webpack.dev.config.js"
+    "build": "webpack --config webpack.prod.config.js",
+    "dev": "webpack-dev-server --open --config webpack.dev.config.js",
+    "start": "npm run build | npm run serve"
   },
   "jest": {
 
   },
   "author": "Dan and Harry",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",

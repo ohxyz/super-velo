@@ -2,19 +2,8 @@ const path = require( 'path' );
 
 module.exports = env => {
 
-    let entryPath = path.join( __dirname, 'src/__debug__/index.js');
-    let outputPath = path.join( __dirname, 'src/__debug__' );
-
-    if ( env !== undefined && env.module !== undefined ) {
-
-        let moduleName = env.module;
-
-        entryPath = path.join( __dirname, `src/engine/${moduleName}/__debug__/index.js` );
-        outputPath = path.join( __dirname, `src/engine/${moduleName}/__debug__` );
-    }
-
-    console.log( '[Entry]   ', entryPath );
-    console.log( '[Output]  ', outputPath );
+    let entryPath = path.join( __dirname, 'src/index.js');
+    let outputPath = path.join( __dirname, 'dist' );
 
     let moduleRules = [ {
 
@@ -40,7 +29,7 @@ module.exports = env => {
 
     return {
 
-        mode: 'development',
+        mode: 'production',
         entry: entryPath,
         output: {
             path: outputPath,

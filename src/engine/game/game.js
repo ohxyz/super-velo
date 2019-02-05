@@ -1,5 +1,5 @@
 import { BackgroundLayer, LayerManager, ImageLayer } from '../layer';
-import { GameObjectManager } from './game-object';
+import { GameObjectManager } from './object';
 
 class Game {
 
