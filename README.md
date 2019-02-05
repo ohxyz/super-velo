@@ -6,7 +6,7 @@
 npm run dev -- --env.module=animation
 ```
 
-# Build
+# Build and serve
 ```
 npm start
 ```
