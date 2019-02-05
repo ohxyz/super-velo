@@ -10,7 +10,7 @@ npm run dev -- --env.module=animation
 ```
 npm start
 ```
-Then go to http://localhost:8080
+Then go to ```http://localhost:8080```
 
-#Demo
+# Demo
 http://www.runademo.com/super-velo/
