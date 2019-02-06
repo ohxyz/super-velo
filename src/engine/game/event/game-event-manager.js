@@ -15,7 +15,6 @@ class GameEventManager extends ObjectManager {
             gameEvent.happen( objects );
         }
     }
-
 }
 
 module.exports = {

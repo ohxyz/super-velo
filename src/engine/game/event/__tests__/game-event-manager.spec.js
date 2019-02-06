@@ -1,4 +1,4 @@
-
+const expect = require( 'chai' ).expect;
 const GameEventManager = require( '../game-event-manager.js' ).GameEventManager;
 const GameEvent = require( '../game-event.js' ).GameEvent;
 
@@ -32,11 +32,11 @@ let event2 = new Event2();
 gameEventManager.add( event1 );
 gameEventManager.add( event2 );
 
-test( 'GameEventManager run method', () => {
+it( 'GameEventManager run method', () => {
 
     gameEventManager.run( objects );
 
-    expect( objects[ 0 ] ).toEqual( { a: 1, b: 3 } );
-    expect( objects[ 1 ] ).toEqual( { b: 4, c: 4 } );
+    expect( objects[ 0 ] ).to.eql( { a: 1, b: 3 } );
+    expect( objects[ 1 ] ).to.eql( { b: 4, c: 4 } );
 
 } )

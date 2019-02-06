@@ -29,8 +29,8 @@ class ImageLayer extends Layer {
         }
 
         // Debug
-        // context.fillStyle = 'green';
-        // context.fillRect( this.x, this.y, this.width, this.height );
+        context.fillStyle = 'green';
+        context.fillRect( this.x, this.y, this.width, this.height );
 
         context.drawImage(
 

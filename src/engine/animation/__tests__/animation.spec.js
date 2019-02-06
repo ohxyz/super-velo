@@ -1,4 +1,6 @@
-test( 'adds 1 + 2 to equal 3', () => {
+const expect = require( 'chai' ).expect;
 
-    expect( 3 ).toBe(3);
+it( 'adds 1 + 2 to equal 3', () => {
+
+    expect( 1 + 2 ).to.equal( 3 );
 } );
