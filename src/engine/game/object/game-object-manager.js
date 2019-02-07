@@ -1,11 +1,11 @@
-import { ObjectManager } from '../../object-manager';
+const ObjectManager = require( '../../object-manager' ).ObjectManager;
 
 class GameObjectManager extends ObjectManager {
 
     
 }
 
-export {
+module.exports = {
 
     GameObjectManager
 };

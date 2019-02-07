@@ -1,13 +1,16 @@
-let ObjectManager = require( '../../object-manager' ).ObjectManager;
+const ObjectManager = require( '../../object-manager' ).ObjectManager;
 
 class GameEventManager extends ObjectManager {
 
-    constructor() {
+    constructor( gameObjectManager ) {
 
-        super( arguments );
+        super();
+        this.gameObjectManager = gameObjectManager;
     }
 
-    run( objects ) {
+    run() {
+
+        let objects = this.gameObjectManager.getObjects();
 
         for ( let i = 0 ; i < this.containers.length; i ++ ) {
 
