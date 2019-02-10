@@ -12,8 +12,10 @@ const WALK = 'walk';
 const JUMP = 'jump';
 const ATTACK = 'attack';
 const JUMP_ATTACK = 'jump-attack';
+const DEAD = 'dead';
+const DIED = 'dead';
 
-export {
+const CONSTANTS = {
 
     REFRESH_RATE,
     
@@ -28,4 +30,11 @@ export {
     WALK,
     JUMP,
     ATTACK,
+    DIED,
+    DEAD,
+};
+
+module.exports = {
+
+    CONSTANTS, ...CONSTANTS
 };

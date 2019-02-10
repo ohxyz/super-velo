@@ -1,12 +1,12 @@
 const EventEmitter = require( 'events' );
-const util = require( '../../util/util.js' );
+const Util = require( '../../util/util.js' );
 
 const { NONE, UP, RIGHT, DOWN, LEFT } = require( '../../constants.js' );
 const { LayerUtil } = require( '../../layer/util.js' );
 
 class GameObject {
 
-    constructor( { id = util.generateRandomString(), layer } ) {
+    constructor( { id = Util.generateRandomString(), layer } ) {
 
         this.id = id;
         this.layer = layer;
@@ -35,6 +35,13 @@ class GameObject {
         this.layer.y = y;
         this.layer.setX2();
         this.layer.setY2();
+    }
+
+
+    // Todo: make the game object move around
+    moveAround() {
+
+
     }
 
     stay( duration = 1000 ) {

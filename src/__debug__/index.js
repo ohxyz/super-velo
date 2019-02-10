@@ -20,7 +20,7 @@ game.addLayer( backgroundLayer );
 game.addObject( redVelo );
 game.addObject( yellowVelo );
 
-game.addObject( rock );
+// game.addObject( rock );
 game.bindInputDevice( redVelo );
 
 game.init();

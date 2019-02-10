@@ -226,16 +226,96 @@ function createVeloAnimationManager( { layer, imageSource = {} } ) {
     } );
 
 
+/* Die images and animations **********************************************************************/
+
+    let dieImage = new Image();
+    dieImage.src = imageSource.die;
+
+    let dieSpriteImage = new SpriteImage( { 
+
+        image: dieImage,
+        sliceWidth: spriteSliceWidth,
+        sliceHeight: spriteSliceHeight,
+        matrix: [ 4, 1 ],
+        range: [ 1, 3 ]
+    } );
+ 
+    let dieLeftAnimation = new SpriteAnimation( {
+
+        layer: layer,
+        repeat: false,
+
+        spriteImage: dieSpriteImage 
+    } );
+
+    let dieRightAnimation = new SpriteAnimation( { 
+
+        layer: layer, 
+        flip: true,
+        repeat: false,
+
+        spriteImage: dieSpriteImage 
+    } );
+
+    // To make the animtion more fun. Use jump animation before die.
+    let jumpSpriteImage = new SpriteImage( {
+
+        image: jumpImage,
+        sliceWidth: spriteSliceWidth,
+        sliceHeight: spriteSliceHeight,
+        matrix: [ 4, 3 ],
+        range: [ 0, 7 ]
+    } );
+
+    let jumpLeftAnimation = new SpriteAnimation( { 
+
+        layer: layer, 
+        repeat: false,
+        spriteImage: jumpSpriteImage 
+    } )
+
+    let jumpRightAnimation = new SpriteAnimation( { 
+
+        layer: layer, 
+        flip: true,
+        repeat: false,
+        spriteImage: jumpSpriteImage 
+    } )
+
+    let dieLeftAnimationQueue = new AnimationQueue( { 
+
+        id: 'die-left',
+        animations: [
+
+            jumpLeftAnimation,
+            dieLeftAnimation
+        ]
+    } );
+
+    let dieRightAnimationQueue = new AnimationQueue( { 
+
+        id: 'die-right',
+        animations: [
+
+            jumpRightAnimation,
+            dieRightAnimation
+        ]
+    } );
+
 /* Add animations *********************************************************************************/
 
     animationManager.addQueueByAnimation( { qid: 'walk-left', animation: walkLeftAnimation } );
     animationManager.addQueueByAnimation( { qid: 'walk-right', animation: walkRightAnimation } );
     animationManager.addQueueByAnimation( { qid: 'idle-left', animation: idleLeftAnimation } );
     animationManager.addQueueByAnimation( { qid: 'idle-right', animation: idleRightAnimation } );
+
     animationManager.addQueue( jumpLeftAnimationQueue );
     animationManager.addQueue( jumpRightAnimationQueue );
     animationManager.addQueue( attackLeftAnimationQueue );
     animationManager.addQueue( attackRightAnimationQueue );
+
+    animationManager.addQueue( dieLeftAnimationQueue );
+    animationManager.addQueue( dieRightAnimationQueue );
 
     return animationManager;
 }

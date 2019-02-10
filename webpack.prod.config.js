@@ -5,26 +5,28 @@ module.exports = env => {
     let entryPath = path.join( __dirname, 'src/index.js');
     let outputPath = path.join( __dirname, 'dist' );
 
-    let moduleRules = [ {
+    let moduleRules = [ 
 
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-            loader: 'babel-loader'
-        }
-
-    }, {
-
-        test: /\.(png|jpg|gif)$/,
-        exclude: /node_modules/,
-        use: [ {    
-                
-            loader: 'file-loader',
-            options: {
-                outputPath: 'images'
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: {
+                loader: 'babel-loader'
             }
-        } ]
-    } ];
+        },
+        
+        {
+            test: /\.(png|jpg|gif)$/,
+            exclude: /node_modules/,
+            use: [ {    
+                    
+                loader: 'file-loader',
+                options: {
+                    outputPath: 'images'
+                }
+            } ]
+        } 
+    ];
 
     return {
 

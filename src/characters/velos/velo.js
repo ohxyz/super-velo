@@ -1,14 +1,21 @@
-const { NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP, ATTACK } = require( '../../engine/constants' );
+const { 
+
+    NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP, ATTACK, DEAD 
+
+} = require( '../../engine/constants' );
+
 const { GameObject } = require( '../../engine/game' );
 const { createVeloAnimationManager } = require( './velo-animation-manager.js' );
 
 class Velo extends GameObject {
 
-    constructor( { imageSource, facing = RIGHT, ...args } ) {
+    constructor( { imageSource, facing = RIGHT, damage = 30, health = 100, ...args } ) {
         
         super( args );
 
         this.facing = facing;
+        this.health = health;
+        this.damage = damage;
         this.currentState = IDLE;
         this.animationManager = createVeloAnimationManager( { 
 
@@ -24,19 +31,9 @@ class Velo extends GameObject {
         this.idle();
     }
 
-    handleWalk() {
+    isDead() {
 
-        let rock = game.object( 'rock' );
-        let isOverlapping = this.isOverlapping( rock, { width: 50, height: 80 } );
-
-        if ( isOverlapping ) {
-
-            rock.layer.backgroundColor = 'purple';
-        }
-        else {
-
-            rock.layer.backgroundColor = 'pink';
-        }
+        return this.currentState === DEAD;
     }
 
     walkByFacing() {
@@ -61,7 +58,6 @@ class Velo extends GameObject {
     stopWalk() {
 
         this.idle();
-        this.handleWalk();
     }
 
     walk( direction ) {
@@ -70,8 +66,6 @@ class Velo extends GameObject {
 
             return;
         }
-
-        this.handleWalk();
 
         if ( direction === LEFT ) {
 
@@ -132,21 +126,35 @@ class Velo extends GameObject {
             } );
         }
 
-        this.attackRock();
+        this.handleAttack();
     }
 
-    attackRock() {
+    handleAttack() {
 
-        let rock = game.object( 'rock' );
-        let isOverlapping = this.isOverlapping( rock, { width: 50, height: 80 } );
+        let yellowVelo = game.object( 'yellow-velo' );
+        let isOverlapping = this.isOverlapping( yellowVelo, { width: 50, height: 80 } );
 
         if ( isOverlapping ) {
 
-            rock.layer.backgroundColor = 'red';
+            // yellowVelo.layer.backgroundColor = 'green';
+
+            if ( yellowVelo.isDead() ) {
+
+                console.log( 'Already died.' );
+            }
+            else {
+
+                yellowVelo.health -= this.damage;
+
+                if ( yellowVelo.health < 0 ) {
+
+                    yellowVelo.die();
+                }
+            }
         }
         else {
 
-            rock.layer.backgroundColor = 'yellow';
+            // yellowVelo.layer.backgroundColor = 'red';
         }
     }
 
@@ -189,6 +197,26 @@ class Velo extends GameObject {
         }
 
         this.currentState = IDLE;
+    }
+
+    die() {
+
+        if ( this.currentState === JUMP ) {
+
+            return;
+        }
+
+        if ( this.facing === LEFT ) {
+
+            this.animationManager.runQueue( 'die-left' );
+        }
+        else if ( this.facing === RIGHT ) {
+
+            this.animationManager.runQueue( 'die-right' );
+        }
+
+        this.currentState = DEAD;
+        
     }
 
     jump( direction = NONE ) {
