@@ -8,14 +8,13 @@ class ObjectManager {
 
     constructor() {
 
-        this.containers = [];
+        this.objects = [];
         this.loopTimerId = 0;
     }
 
-    add( object, { ...props } = {} ) {
+    add( object ) {
 
-        let objectContainer = new ObjectContainer( { object, ...props } );
-        this.containers.push( objectContainer );
+        this.objects.push( object )
     }
 
     get( idOrIndex ) {
@@ -36,11 +35,11 @@ class ObjectManager {
 
     getById( id ) {
 
-        for ( let i = 0; i < this.containers.length; i ++ ) {
+        for ( let i = 0; i < this.objects.length; i ++ ) {
 
-            if ( id === this.containers[ i ].id ) {
+            if ( id === this.objects[ i ].id ) {
 
-                return this.containers[ i ].object;
+                return this.objects[ i ];
             }
         }
 
@@ -49,9 +48,9 @@ class ObjectManager {
 
     getByIndex( index ) {
 
-        if ( index < this.containers.length ) {
+        if ( index < this.objects.length ) {
 
-            return this.containers[ index ].object;
+            return this.objects[ index ];
         }
 
         return null;
@@ -59,8 +58,7 @@ class ObjectManager {
 
     getObjects() {
 
-        return this.containers.map( container => container.object );
-
+        return this.objects;
     }
 
     loop( methodName, { args = [], interval = 50 } = {} ) {
@@ -83,35 +81,9 @@ class ObjectManager {
 
         return new Class( ...args );
     }
-
-}
-
-class ObjectContainer {
-
-    constructor( { object, ...props } ) {
-
-        if ( 'id' in props && typeof id === 'string' ) {
-
-            this.id = id;
-        }
-        else if ( 'id' in object ) {
-
-            this.id = object.id;
-        }
-        else {
-
-            this.id = util.generateRandomString();
-        }
-
-        this.object = object;
-        this.className = this.object.constructor.name;
-
-        Object.assign( this, props );
-    }
 }
 
 module.exports = {
 
-    ObjectContainer,
     ObjectManager
 };

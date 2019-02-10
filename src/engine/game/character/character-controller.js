@@ -1,10 +1,11 @@
-import { UP, RIGHT, DOWN, LEFT, WALK, JUMP, ATTACK, IDLE } from '../engine/constants.js';
+const { UP, RIGHT, DOWN, LEFT, WALK, JUMP, ATTACK, IDLE } = require( '../../constants.js' );
 
 class CharacterController {
 
-    constructor( character ) {
+    constructor( { character, canvasElement } ) {
 
         this.character = character;
+        this.canvasElement = canvasElement;
 
         this.keysDown = {
 
@@ -21,8 +22,7 @@ class CharacterController {
 
         document.body.addEventListener( 'keydown', this.handleKeyDown.bind( this ) );
         document.body.addEventListener( 'keyup', this.handleKeyUp.bind( this ) );
-        document.body.addEventListener( 'mousedown', this.handleMouseDown.bind( this ) );
-
+        this.canvasElement.addEventListener( 'mousedown', this.handleMouseDown.bind( this ) );
     }
 
     resetKeysDown() {
@@ -141,7 +141,7 @@ class CharacterController {
     }
 }
 
-export {
+module.exports = {
 
     CharacterController
 };

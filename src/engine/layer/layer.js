@@ -14,10 +14,20 @@ class Layer {
         this.width = width;
         this.height = height;
 
-        this.x2 = this.x + width;
-        this.y2 = this.y + height;
+        this.setX2();
+        this.setY2();
 
-        this._hexColor = util.generateRandomColor();
+        this.backgroundColor = util.generateRandomColor();
+    }
+
+    setX2() {
+
+        this.x2 = this.x + this.width;
+    }
+
+    setY2() {
+
+        this.y2 = this.y + this.height;
     }
 
     get center() {
@@ -30,7 +40,7 @@ class Layer {
 
     draw( context ) {
 
-        context.fillStyle = this._hexColor;
+        context.fillStyle = this.backgroundColor;
         context.fillRect( this.x, this.y, this.width, this.height );
     }
 

@@ -2,12 +2,13 @@ import { Layer } from './layer.js';
 
 class ImageLayer extends Layer {
 
-    constructor( { imageSlice = null, flip = false, ...object } ) {
+    constructor( { imageSlice = null, flip = false, backgroundColor = '', ...object } ) {
 
         super( object );
 
         this.imageSlice = imageSlice;
         this.shouldFlipImage = flip;
+        this.backgroundColor = backgroundColor;
     }
 
     draw( context ) {
@@ -29,8 +30,12 @@ class ImageLayer extends Layer {
         }
 
         // Debug
-        context.fillStyle = 'green';
-        context.fillRect( this.x, this.y, this.width, this.height );
+
+        if ( this.backgroundColor !== '' ) {
+
+            context.fillStyle = this.backgroundColor;
+            context.fillRect( this.x, this.y, this.width, this.height );
+        }
 
         context.drawImage(
 

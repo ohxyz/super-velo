@@ -10,24 +10,6 @@ const manager = require( '../index.js' );
 
 describe( 'ObjectManager module', () => {
 
-    it( 'ObjectContainer constructor', () => {
-
-        let o = { id: 'o', a: 1, b: 'foo' };
-
-        let oc = new manager.ObjectContainer( { object: o } );
-
-        expect( oc.id).to.equal( 'o' ); 
-        expect( oc.object === o ).to.equal( true );
-        expect( oc.object.a ).to.equal( 1 );
-
-        let oc2 = new manager.ObjectContainer( { id: 'ID', object: o, 'foo': 'bar' } );
-
-        expect( oc2.id ).to.equal( 'ID' );
-        expect( oc2.foo ).to.equal( 'bar' );
-        expect( oc2.object ).to.equal( o );
-
-    } );
-
     it( 'ObjectManager add method and get method', () => { 
 
         let om = new manager.ObjectManager();
@@ -36,22 +18,20 @@ describe( 'ObjectManager module', () => {
 
         om.add( o );
 
-        expect( om.containers[ 0 ].id ).to.equal( 'o' );
+        expect( om.objects[ 0 ].id ).to.equal( 'o' );
 
-        let o2 = { x: 'y' };
+        let o2 = { id: 'o2', x: 'y' };
 
-        om.add( o2, { id: 'o2', 'my-name': o2 } );
+        om.add( o2 );
 
-        expect( om.containers[ 1 ].id ).to.equal( 'o2' );
-        expect( om.containers[ 1 ].object.x ).to.equal( 'y' );
-        expect( om.containers[ 1 ][ 'my-name' ] ).to.equal( o2 );
+        expect( om.objects[ 1 ].x ).to.equal( 'y' );
 
         let result = om.get( 'o2' );
 
         expect( result ).to.equal( o2 );
 
         let result2 = om.get( 'bar' );
-
+        
         expect( result2 ).to.equal( null );
 
     } )

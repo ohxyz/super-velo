@@ -1,12 +1,11 @@
-import { AnimationManager, SpriteAnimation, StaticSpriteAnimation, AnimationQueue } from '../engine/animation';
-import { SpriteImage } from '../engine/sprite';
+const { AnimationManager, 
+        SpriteAnimation, 
+        StaticSpriteAnimation, 
+        AnimationQueue } = require( '../../engine/animation' );
 
-import walkImageSource from '../assets/walk.png';
-import idleImageSource from '../assets/idle.png';
-import attackImageSource from '../assets/attack.png';
-import jumpImageSource from '../assets/jump.png';
+const { SpriteImage } = require( '../../engine/sprite' );
 
-function createAnimationManager( layer ) {
+function createVeloAnimationManager( { layer, imageSource = {} } ) {
 
     let animationManager = new AnimationManager();
     let spriteSliceWidth = 196;
@@ -15,7 +14,7 @@ function createAnimationManager( layer ) {
 /* Walk images and animations *********************************************************************/
 
     let walkImage = new Image();
-    walkImage.src = walkImageSource;
+    walkImage.src = imageSource.walk;
 
     let walkSpriteImage = new SpriteImage( { 
 
@@ -25,13 +24,23 @@ function createAnimationManager( layer ) {
         matrix: [ 4, 4 ]
     } );
 
-    let walkLeftAnimation = new SpriteAnimation( { layer: layer, spriteImage: walkSpriteImage } );
-    let walkRightAnimation = new SpriteAnimation( { layer: layer, flip: true, spriteImage: walkSpriteImage } );
+    let walkLeftAnimation = new SpriteAnimation( {
+
+        layer: layer, 
+        spriteImage: walkSpriteImage 
+    } );
+    
+    let walkRightAnimation = new SpriteAnimation( { 
+
+        layer: layer, 
+        flip: true, 
+        spriteImage: walkSpriteImage 
+    } );
 
 /* Idle images and animations *********************************************************************/
 
     let idleImage = new Image();
-    idleImage.src = idleImageSource;
+    idleImage.src = imageSource.idle;
 
     let idleSpriteImage = new SpriteImage( { 
 
@@ -41,15 +50,24 @@ function createAnimationManager( layer ) {
         matrix: [ 4, 5 ]
     } );
  
+    let idleLeftAnimation = new SpriteAnimation( {
 
-    let idleLeftAnimation = new SpriteAnimation( { layer: layer, spriteImage: idleSpriteImage } );
-    let idleRightAnimation = new SpriteAnimation( { layer: layer, flip: true, spriteImage: idleSpriteImage } );
+        layer: layer, 
+        spriteImage: idleSpriteImage 
+    } );
+
+    let idleRightAnimation = new SpriteAnimation( { 
+
+        layer: layer, 
+        flip: true, 
+        spriteImage: idleSpriteImage 
+    } );
 
 
 /* Jump images ************************************************************************************/
 
     let jumpImage = new Image();
-    jumpImage.src = jumpImageSource;
+    jumpImage.src = imageSource.jump;
 
     // 50 * 7 = 350 ms
     let jumpStartSpriteImage = new SpriteImage( { 
@@ -145,7 +163,6 @@ function createAnimationManager( layer ) {
             jumpLeftEndAnimation, 
             idleLeftAnimation 
         ]
-
     } );
 
     let jumpRightAnimationQueue = new AnimationQueue( {
@@ -163,7 +180,7 @@ function createAnimationManager( layer ) {
 /* Attack images and animations *******************************************************************/
     
     let attackImage = new Image();
-    attackImage.src = attackImageSource;
+    attackImage.src = imageSource.attack;
 
     let attackSpriteImage = new SpriteImage( { 
 
@@ -196,7 +213,6 @@ function createAnimationManager( layer ) {
         animations: [ 
         
             attackLeftAnimation,
-            // idleLeftAnimation 
         ]
     } );
 
@@ -206,7 +222,6 @@ function createAnimationManager( layer ) {
         animations: [
 
             attackRightAnimation,
-            // idleRightAnimation 
         ]
     } );
 
@@ -225,7 +240,7 @@ function createAnimationManager( layer ) {
     return animationManager;
 }
 
-export {
+module.exports = {
 
-    createAnimationManager,
+    createVeloAnimationManager,
 }

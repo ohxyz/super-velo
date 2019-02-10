@@ -1,43 +1,58 @@
-import { BackgroundLayer, LayerManager, ImageLayer } from '../layer';
+import { BackgroundLayer, LayerManager } from '../layer';
 import { GameObjectManager } from './object';
+import { CharacterController } from './character/character-controller.js';
 
 class Game {
 
-    constructor( { element, width, height, backgroundImage } ) {
+    constructor( { element, width, height } ) {
 
         this.element = element;
         this.width = width;
         this.height = height;
-        this.backgroundImage = backgroundImage;
 
         this.element.width = this.width;
         this.element.height = this.height;
         this.context = this.element.getContext( '2d' );
+
+        this.objectManager = new GameObjectManager();
         this.layerManager = new LayerManager( this.context );
-        this.gameObjectManager = new GameObjectManager();
+    }
+
+    bindInputDevice( gameObject ) {
+
+        let characterController = new CharacterController( { 
+
+            character: gameObject,
+            canvasElement: this.element
+        } );
+
+        characterController.init();
     }
 
     init() {
 
-        let backgroundLayer = new BackgroundLayer( { 
-
-            id: 'background',
-            x: 0,
-            y: 0,
-            zIndex: 0,
-            width: this.width,
-            height: this.height,
-            image: this.backgroundImage
-        } );
-
-        this.layerManager.add( backgroundLayer );
         this.layerManager.init();
+    }
+
+    addLayer( layer ) {
+
+        this.layerManager.add( layer );
     }
 
     addObject( gameObject ) {
 
         this.layerManager.add( gameObject.layer );
-        this.gameObjectManager.add( gameObject );
+        this.objectManager.add( gameObject );
+    }
+
+    object( id ) {
+
+        return this.objectManager.getById( id );
+    }
+
+    objects( query ) {
+
+        return this.objectManager.getObjects( query );
     }
 }
 

@@ -1,27 +1,42 @@
-import { NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP, ATTACK } from '../engine/constants';
-import { SpriteImage } from '../engine/sprite';
-import { AnimationManager, AnimationQueue, SpriteAnimation, MoveAnimation } from '../engine/animation';
-import { GameObject } from '../engine/game';
-import { createAnimationManager } from './velo-animation-manager.js';
-import { ImageLayer } from '../engine/layer';
+const { NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP, ATTACK } = require( '../../engine/constants' );
+const { GameObject } = require( '../../engine/game' );
+const { createVeloAnimationManager } = require( './velo-animation-manager.js' );
 
 class Velo extends GameObject {
 
-    constructor( layer ) {
+    constructor( { imageSource, facing = RIGHT, ...args } ) {
         
-        super( layer );
+        super( args );
 
-        this.facing = RIGHT;
-        this.animationManager = new AnimationManager();
+        this.facing = facing;
         this.currentState = IDLE;
+        this.animationManager = createVeloAnimationManager( { 
+
+            layer: this.layer, 
+            imageSource: imageSource
+        } );
 
         this.init();
     }
 
     init() {
 
-        this.animationManager = createAnimationManager( this.layer );
         this.idle();
+    }
+
+    handleWalk() {
+
+        let rock = game.object( 'rock' );
+        let isOverlapping = this.isOverlapping( rock, { width: 50, height: 80 } );
+
+        if ( isOverlapping ) {
+
+            rock.layer.backgroundColor = 'purple';
+        }
+        else {
+
+            rock.layer.backgroundColor = 'pink';
+        }
     }
 
     walkByFacing() {
@@ -46,6 +61,7 @@ class Velo extends GameObject {
     stopWalk() {
 
         this.idle();
+        this.handleWalk();
     }
 
     walk( direction ) {
@@ -54,6 +70,8 @@ class Velo extends GameObject {
 
             return;
         }
+
+        this.handleWalk();
 
         if ( direction === LEFT ) {
 
@@ -114,6 +132,22 @@ class Velo extends GameObject {
             } );
         }
 
+        this.attackRock();
+    }
+
+    attackRock() {
+
+        let rock = game.object( 'rock' );
+        let isOverlapping = this.isOverlapping( rock, { width: 50, height: 80 } );
+
+        if ( isOverlapping ) {
+
+            rock.layer.backgroundColor = 'red';
+        }
+        else {
+
+            rock.layer.backgroundColor = 'yellow';
+        }
     }
 
     jumpLeft() {
@@ -176,7 +210,7 @@ class Velo extends GameObject {
         }
 
         this.stay( 300 )
-            .then( () => this.bounce( direction, { time: 700 } ) )
+            .then( () => this.bounce( direction, { duration: 700 } ) )
             .then( () => { this.currentState = NONE } );
     }
 
@@ -186,21 +220,8 @@ class Velo extends GameObject {
     }
 }
 
-
-let veloLayer = new ImageLayer( {
-
-    id: 'velo',
-    x: 128,
-    y: 128,
-    zIndex: 2,
-    width: 196,
-    height: 197.5,
-} );
-
-let velo = new Velo( { id: 'velo', layer: veloLayer } );
-
-export {
+module.exports = {
     
-    velo
+    Velo
 };
 

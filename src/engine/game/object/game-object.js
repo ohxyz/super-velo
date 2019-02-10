@@ -1,31 +1,52 @@
-import { NONE, UP, RIGHT, DOWN, LEFT } from '../../constants.js';
-import { generateRandomString } from '../../util/util.js';
+const EventEmitter = require( 'events' );
+const util = require( '../../util/util.js' );
+
+const { NONE, UP, RIGHT, DOWN, LEFT } = require( '../../constants.js' );
+const { LayerUtil } = require( '../../layer/util.js' );
 
 class GameObject {
 
-    constructor( { id = generateRandomString(), layer } ) {
+    constructor( { id = util.generateRandomString(), layer } ) {
 
         this.id = id;
         this.layer = layer;
         this.isBounceStarted = false;
+        this.eventEmitter = new EventEmitter();
+    }
+
+    on( eventName, listener ) {
+
+        this.eventEmitter.on( eventName, listener );
+    }
+
+    emit( eventName ) {
+
+        this.eventEmitter.emit( eventName );
+    }
+
+    isOverlapping( gameObject, tolerance = { width: 0, height: 0 } ) {
+
+        return LayerUtil.doOverlap( this.layer, gameObject.layer, tolerance );
     }
 
     moveTo( x, y ) {
 
         this.layer.x = x;
         this.layer.y = y;
+        this.layer.setX2();
+        this.layer.setY2();
     }
 
-    stay( time = 1000 ) {
+    stay( duration = 1000 ) {
 
         return new Promise( ( resolve, reject ) => { 
 
-            setTimeout( () => resolve(), time );
+            setTimeout( () => resolve(), duration );
 
         } );
-
     }
 
+    //Todo: call moveTo method instead of setX2 or setY2()
     move( direction = None, step = 5 ) {
 
         if ( direction === UP ) {
@@ -45,6 +66,9 @@ class GameObject {
             this.layer.x -= step;
         }
 
+        this.layer.setX2();
+        this.layer.setY2();
+
         return new Promise( ( resolve, reject ) => { 
 
             resolve();
@@ -54,7 +78,7 @@ class GameObject {
     bounce( direction = NONE, { startHeight = 50,
                                 stepSizeX = 5,
                                 stepSizeY = 5,
-                                time = 500, 
+                                duration = 500, 
                                 interval = 20 } = {} ) {
 
         if ( this.isBounceStarted ) {
@@ -88,7 +112,7 @@ class GameObject {
             eachStepY = -stepSizeY;
         }
 
-        let total = parseInt( ( time / 2 ) / interval, 10 );
+        let total = parseInt( ( duration / 2 ) / interval, 10 );
         let count = 1;
 
         const executor = ( resolve, reject ) => {
@@ -132,12 +156,10 @@ class GameObject {
         };
 
         return new Promise( executor );
-
     }
-
 }
 
-export {
+module.exports = {
 
     GameObject
 };
