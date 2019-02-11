@@ -76,7 +76,7 @@ function createVeloAnimationManager( { layer, imageSource = {} } ) {
         sliceWidth: spriteSliceWidth,
         sliceHeight: spriteSliceHeight,
         matrix: [ 4, 3 ],
-        range: [ 0, 6 ]
+        range: [ 0, 7 ]
     } );
 
     // 50 * 4 = 200 ms;
@@ -86,7 +86,7 @@ function createVeloAnimationManager( { layer, imageSource = {} } ) {
         sliceWidth: spriteSliceWidth,
         sliceHeight: spriteSliceHeight,
         matrix: [ 4, 3 ],
-        range: [ 8, 11 ]
+        range: [ 8, 4 ]
     } );
 
     // Should be time of ( stay + bounce - 350 - 250 - delay ) = 300 + 1000 - 350 - 200 - 50 = 700
@@ -264,7 +264,7 @@ function createVeloAnimationManager( { layer, imageSource = {} } ) {
         sliceWidth: spriteSliceWidth,
         sliceHeight: spriteSliceHeight,
         matrix: [ 4, 3 ],
-        range: [ 0, 7 ]
+        range: [ 0, 9 ]
     } );
 
     let jumpLeftAnimation = new SpriteAnimation( { 

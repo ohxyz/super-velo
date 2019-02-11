@@ -10,7 +10,6 @@ let redVeloImageSource = {
     attack: require( './images/red-velo/claw_attack.png' ),
     jump: require( './images/red-velo/jump.png' ),
     die: require( './images/red-velo/die.png' )
-
 };
 
 let redVeloLayer = new ImageLayer( {
@@ -18,7 +17,7 @@ let redVeloLayer = new ImageLayer( {
     id: 'red-velo',
     x: 128,
     y: 128,
-    zIndex: 2,
+    zIndex: 100,
     width: 196,
     height: 197.5,
     // backgroundColor: UTIL.generateRandomColor()

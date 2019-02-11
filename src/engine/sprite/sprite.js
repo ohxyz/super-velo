@@ -4,7 +4,7 @@
 
 class SpriteImage {
 
-    constructor( { image, sliceWidth, sliceHeight, matrix, range, multiple } ) {
+    constructor( { image, sliceWidth, sliceHeight, matrix, range, multiple = 1 } ) {
 
         this.image = image;
         
@@ -13,8 +13,14 @@ class SpriteImage {
         this.countInRows = matrix[ 0 ];
         this.countInCols = matrix[ 1 ];
         this.startIndex = range === undefined ? 0 : range[ 0 ];
-        this.endIndex = range === undefined ? this.countInRows * this.countInCols - 1 : range[ 1 ];
-        this.multiple = multiple === undefined ? 1 : multiple;
+
+        this.endIndex = range === undefined 
+                      ? this.countInRows * this.countInCols - 1 
+                      : this.startIndex + range[ 1 ] - 1;
+
+        this.multiple = multiple;
+
+        console.log( this.startIndex, this.endIndex )
     }
 
     slice() {
