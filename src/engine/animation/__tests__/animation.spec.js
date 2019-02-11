@@ -1,4 +1,4 @@
-const expect = require( 'chai' ).expect;
+import { expect } from 'chai';
 
 it( 'adds 1 + 2 to equal 3', () => {
 

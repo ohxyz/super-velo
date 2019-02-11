@@ -1,8 +1,7 @@
 /**
  * Layer module
  */
-
-const util = require( '../util/util.js' );
+import Util from '../util/util.js';
 
 class Layer {
     
@@ -17,7 +16,7 @@ class Layer {
         this.setX2();
         this.setY2();
 
-        this.backgroundColor = util.generateRandomColor();
+        this.backgroundColor = Util.generateRandomColor();
     }
 
     setX2() {
@@ -46,7 +45,7 @@ class Layer {
 
 }
 
-module.exports = {
+export {
 
     Layer
 };

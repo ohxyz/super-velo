@@ -1,11 +1,11 @@
-const { 
+import { 
 
     NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP, ATTACK, DEAD 
 
-} = require( '../../engine/constants' );
+} from '../../engine/constants';
 
-const { GameObject } = require( '../../engine/game' );
-const { createVeloAnimationManager } = require( './velo-animation-manager.js' );
+import { GameObject } from '../../engine/game';
+import { createVeloAnimationManager } from './velo-animation-manager.js';
 
 class Velo extends GameObject {
 
@@ -248,7 +248,7 @@ class Velo extends GameObject {
     }
 }
 
-module.exports = {
+export {
     
     Velo
 };

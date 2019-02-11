@@ -5,7 +5,6 @@ import { BackgroundLayer, LayerManager, ImageLayer, Layer } from './engine/layer
 import { Game } from './engine/game';
 import { ObjectManager, ObjectContainer } from './engine/object-manager';
 import { GameEventManager } from './engine/game/event';
-import { gameStorage } from './engine/game/storage';
 
 import { velo } from './characters/velo.js';
 import { Rock } from './objects/rocks/rock.js';
@@ -17,10 +16,8 @@ let game = new Game( {
     element: document.getElementById( 'game' ),
     width: 960,
     height: 480,
-    backgroundImage: backgroundImage,
-    storage: gameStorage
+    backgroundImage: backgroundImage
 } );
-
 
 let veloLayer = new ImageLayer( {
 

@@ -5,7 +5,6 @@ import { Animation } from './animation.js';
 import { SpriteAnimation } from './sprite-animation';
 import { StaticSpriteAnimation } from './static-sprite-animation';
 
-
 export {
 
     Animation,

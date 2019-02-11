@@ -1,7 +1,7 @@
-const { NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP, ATTACK } = require( '../../engine/constants' );
-const { ImageLayer } = require( '../../engine/layer' );
-const { Velo } = require( './velo.js' );
-const UTIL = require( '../../engine/util/util.js' );
+import { NONE, UP, RIGHT, DOWN, LEFT, IDLE, WALK, JUMP, ATTACK } from '../../engine/constants';
+import { ImageLayer } from '../../engine/layer';
+import { Velo } from './velo.js';
+import UTIL from '../../engine/util/util.js';
 
 let redVeloImageSource = { 
 
@@ -53,7 +53,7 @@ let yellowVelo = new Velo( {
 
 } );
 
-module.exports = {
+export {
 
     redVelo,
     yellowVelo

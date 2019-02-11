@@ -27,5 +27,4 @@ game.init();
 
 window.velo = redVelo;
 window.ObjectManager = ObjectManager;
-window.ObjectContainer = ObjectContainer;
 

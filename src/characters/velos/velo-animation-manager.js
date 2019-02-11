@@ -1,9 +1,11 @@
-const { AnimationManager, 
-        SpriteAnimation, 
-        StaticSpriteAnimation, 
-        AnimationQueue } = require( '../../engine/animation' );
+import { 
+    AnimationManager, 
+    SpriteAnimation, 
+    StaticSpriteAnimation, 
+    AnimationQueue 
+} from '../../engine/animation';
 
-const { SpriteImage } = require( '../../engine/sprite' );
+import { SpriteImage } from '../../engine/sprite';
 
 function createVeloAnimationManager( { layer, imageSource = {} } ) {
 
@@ -320,7 +322,7 @@ function createVeloAnimationManager( { layer, imageSource = {} } ) {
     return animationManager;
 }
 
-module.exports = {
+export {
 
     createVeloAnimationManager,
 }

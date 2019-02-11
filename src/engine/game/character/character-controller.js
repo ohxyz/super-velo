@@ -1,4 +1,4 @@
-const { UP, RIGHT, DOWN, LEFT, WALK, JUMP, ATTACK, IDLE } = require( '../../constants.js' );
+import { UP, RIGHT, DOWN, LEFT, WALK, JUMP, ATTACK, IDLE } from '../../constants.js';
 
 class CharacterController {
 
@@ -141,7 +141,7 @@ class CharacterController {
     }
 }
 
-module.exports = {
+export {
 
     CharacterController
 };

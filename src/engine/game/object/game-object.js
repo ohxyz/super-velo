@@ -1,8 +1,7 @@
-const EventEmitter = require( 'events' );
-const Util = require( '../../util/util.js' );
-
-const { NONE, UP, RIGHT, DOWN, LEFT } = require( '../../constants.js' );
-const { LayerUtil } = require( '../../layer/util.js' );
+import EventEmitter from 'events';
+import Util from '../../util/util.js';
+import { NONE, UP, RIGHT, DOWN, LEFT } from '../../constants.js';
+import { LayerUtil } from '../../layer/util.js';
 
 class GameObject {
 
@@ -166,7 +165,7 @@ class GameObject {
     }
 }
 
-module.exports = {
+export {
 
     GameObject
 };

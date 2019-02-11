@@ -2,8 +2,6 @@
  * A utility to manger objects
  */
 
-const util = require( '../util/util.js' );
-
 class ObjectManager {
 
     constructor() {
@@ -83,7 +81,7 @@ class ObjectManager {
     }
 }
 
-module.exports = {
+export {
 
     ObjectManager
 };

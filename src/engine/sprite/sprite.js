@@ -1,9 +1,21 @@
-/**
- * Sprite
- */
-
 class SpriteImage {
 
+    /**
+     * Describe an image with sprite items.
+     *
+     * @param {Object} object - Contains a list of arguments.
+     * @param {Image}  object.image - Image Object
+     * @param {number} object.sliceWidth - Width of an ImageSlice object.
+     * @param {number} object.sliceWidth - Height of an ImageSlice object.
+     * @param {Array}  object.matrix
+     * @param {number} object.matrix.0 - Count of items in each row of the sprite image.
+     * @param {number} object.matrix.1 - Count of rows of the sprite image.
+     * @param {Array}  object.range
+     * @param {number} object.range.0 - Start index of the sprite items.
+     * @param {number} object.range.1 - Count of sprite items, starting with range.0
+     * @param {number} object.multipe - e.g. If multiple is 3, then the same sprite item will be 
+     *                                  stored 3 times.
+     */
     constructor( { image, sliceWidth, sliceHeight, matrix, range, multiple = 1 } ) {
 
         this.image = image;
@@ -19,10 +31,13 @@ class SpriteImage {
                       : this.startIndex + range[ 1 ] - 1;
 
         this.multiple = multiple;
-
-        console.log( this.startIndex, this.endIndex )
     }
 
+    /**
+     * Slice the sprite image into image slices(sprite items). 
+     *
+     * @returns {Array} - Sprite items.
+     */
     slice() {
 
         let spriteItems = [];
